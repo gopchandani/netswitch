@@ -1,0 +1,58 @@
+;areward  pdf
+;at time 10
+New Graph
+Size 5 by 5
+
+Graph Font HELVETICA15
+
+Graph Title Probability Distribution Function (CDF)
+New Text 0.500000, 1.800000
+Variable name: areward
+Time: 10.000000
+Mean: 0.994626
+Variance: 1.940860
+
+Text Font HELVETICA11
+
+New Text 0.500000, 1.650000
+Project name: san-attempt
+Study name: astudy
+Experiment name: Experiment_1
+
+Text Font HELVETICA11
+
+New Text 0.500000, 1.500000
+
+Text Font HELVETICA11
+
+New Curve
+curve symbol diamond size 3
+curve type solid
+curve gray 0.8
+curve interpolation yhistogram
+
+New Points
+0, 0
+1, 0.250122129946268
+2, 0.375183194919399
+3, 0.43771372740596
+4, 0.468978993649238
+5, 0.484611626770875
+6, 0.492427943331691
+7, 0.496336101612098
+8, 0.498290180752301
+9, 0.499267220322402
+10, 0.499755740107453
+
+X Label areward - x
+X Font Helvetica12BI
+X Maximum 10.4
+X Minimum 0
+X Interval 1
+Y Label Probability - P(X = x)
+Y Font Helvetica12BI
+Y Maximum 1.05
+Y Minimum 0.00
+Y Interval 0.1
+Y numberstyle floating 2
+

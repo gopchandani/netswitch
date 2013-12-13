@@ -1,0 +1,57 @@
+;assreward  pdf
+;at time -1
+New Graph
+Size 5 by 5
+
+Graph Font HELVETICA15
+
+Graph Title Probability Distribution Function (CDF)
+New Text 0.500000, 1.800000
+Variable name: assreward
+Mean: 0.994626
+Variance: 1.940860
+
+Text Font HELVETICA11
+
+New Text 0.500000, 1.650000
+Project name: san-attempt
+Study name: astudy
+Experiment name: Experiment_1
+
+Text Font HELVETICA11
+
+New Text 0.500000, 1.500000
+
+Text Font HELVETICA11
+
+New Curve
+curve symbol diamond size 3
+curve type solid
+curve gray 0.8
+curve interpolation yhistogram
+
+New Points
+0, 0.500244258902201
+1, 0.750366388547492
+2, 0.875427453604334
+3, 0.937957986337134
+4, 0.969223252855868
+5, 0.984855886216792
+6, 0.992672202958493
+7, 0.996580361362372
+8, 0.998534440579527
+9, 0.999511480193176
+10, 1
+
+X Label assreward - x
+X Font Helvetica12BI
+X Maximum 10.4
+X Minimum 0
+X Interval 1
+Y Label Probability - P(X = x)
+Y Font Helvetica12BI
+Y Maximum 1.05
+Y Minimum 0.00
+Y Interval 0.1
+Y numberstyle floating 2
+

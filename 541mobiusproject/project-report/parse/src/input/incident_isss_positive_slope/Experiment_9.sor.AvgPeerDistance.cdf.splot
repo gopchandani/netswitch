@@ -1,0 +1,57 @@
+;AvgPeerDistance  pdf
+;at time -1
+New Graph
+Size 5 by 5
+
+Graph Font HELVETICA15
+
+Graph Title Probability Distribution Function (CDF)
+New Text 0.500000, 1.800000
+Variable name: AvgPeerDistance
+Mean: 6.285714
+Variance: 7.632653
+
+Text Font HELVETICA11
+
+New Text 0.500000, 1.650000
+Project name: 541Project
+Study name: incident_study_positive_slope
+Experiment name: Experiment_9
+
+Text Font HELVETICA11
+
+New Text 0.500000, 1.500000
+
+Text Font HELVETICA11
+
+New Curve
+curve symbol diamond size 3
+curve type solid
+curve gray 0.8
+curve interpolation yhistogram
+
+New Points
+0, 0
+1, 0.0571428579145145
+2, 0.123809524959586
+3, 0.200000001317749
+4, 0.285714287064721
+5, 0.38095238223753
+6, 0.485714286854976
+7, 0.600000000937812
+8, 0.723809524484379
+9, 0.857142857500409
+10, 1
+
+X Label AvgPeerDistance - x
+X Font Helvetica12BI
+X Maximum 10.4
+X Minimum 0
+X Interval 1
+Y Label Probability - P(X = x)
+Y Font Helvetica12BI
+Y Maximum 1.05
+Y Minimum 0.00
+Y Interval 0.1
+Y numberstyle floating 2
+

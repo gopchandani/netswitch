@@ -1,0 +1,41 @@
+Mobius sor Version 2.4, 
+Copyright (c) William H. Sanders and Univ. of Illinois 1994-2010
+
+******************************************************************************
+                  Mobius ITERATIVE SOR STEADY STATE SOLVER 
+
+                  ITERATIVE SOR STEADY STATE SOLVER RESULTS
+******************************************************************************
+
+Started: Thu Nov  7 22:24:53 2013
+
+Project name: san-attempt
+Study name: astudy
+State space name: assg
+Experiment name: Experiment_1
+
+Global variable settings for this experiment:
+
+Verbosity: 0
+Accuracy: 1.000000e-09
+Weight: 1.000000
+Max iterations: 300000
+Matrix diagonalization off.
+
+Computation Time (seconds): -0.000000
+User Time (seconds): 0.000000
+System Time (seconds): -0.000000
+Number of states in process: 11
+Number of non-zero elements: 31
+Solution converged in 94 iterations.
+Maximum difference: 8.787163e-10
+
+Computing the performance variables
+******************************************************************************
+Performance variable :  assreward
+Mean                 :  9.946263e-01
+Variance             :  1.940860e+00
+Plot files    (pdf)  :  Experiment_1.sor.assreward.pdf.splot
+              (cdf)  :  Experiment_1.sor.assreward.cdf.splot
+Finished: Thu Nov  7 22:24:53 2013
+

@@ -1,0 +1,11 @@
+
+**********************************************************
+
+State Generation initiated on Experiment_1 of assg started at Thu Nov 07 22:24:44 CST 2013 ...
+path=[/home/gopchandani/MobiusProject/san-attempt/Transformer/assg//]
+License File=/usr/share/mobius-2.4//License.mli
+There are no global variables.
+SSG: SetTraceLevel: 0
+
+Generated: 11 states
+Computation Time (user + system): 4.000000e-03 seconds

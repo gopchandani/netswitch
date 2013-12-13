@@ -1,0 +1,12 @@
+Version:1
+NumPV:2
+Name:areward
+Type:0
+NumTimes:1
+Start:10000
+Stop:10000
+Name:assreward
+Type:3
+NumTimes:1
+Start:0
+Stop:1

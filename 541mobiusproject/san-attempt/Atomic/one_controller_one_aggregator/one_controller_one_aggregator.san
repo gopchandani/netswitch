@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<class id="Mobius.AtomicModels.San.SanInterface">
+	<int id="ClassVersion">1</int>
+	<class id="Mobius.BaseClasses.BaseInterfaceClass">
+		<int id="ClassVersion">3</int>
+		<string id="ModelName">one_controller_one_aggregator</string>
+		<class id="Mobius.AtomicModels.San.SanEditor">
+			<int id="ClassVersion">3</int>
+			<class id="Mobius.BaseClasses.BaseEditorClass">
+				<int id="ClassVersion">3</int>
+				<boolean id="HasPanel">true</boolean>
+				<class id="Mobius.BaseClasses.BasePanelClass">
+					<int id="ClassVersion">2</int>
+					<point id="Size of Panel">
+						<int id="x">1032</int>
+						<int id="y">503</int>
+					</point>
+					<double id="ZoomFactor">1.0</double>
+					<boolean id="ShowGridEnabled">true</boolean>
+					<int id="ShowGridStep">10</int>
+					<boolean id="SnapGridEnabled">true</boolean>
+					<int id="SnapGridStep">10</int>
+					<class id="Mobius.AtomicModels.San.PlacePanelObject">
+						<int id="ClassVersion">1</int>
+						<class id="Mobius.BaseClasses.BaseVertexClass">
+							<int id="ClassVersion">3</int>
+							<class id="Mobius.BaseClasses.BasePanelObjectClass">
+								<int id="ClassVersion">5</int>
+								<string id="Name">Controller_NumberOfTokens</string>
+								<boolean id="ContainsLabel">true</boolean>
+								<boolean id="IsLabelShown">true</boolean>
+							</class>
+							<point id="CenterPoint">
+								<int id="x">485</int>
+								<int id="y">235</int>
+							</point>
+						</class>
+						<boolean id="ReadOnly">false</boolean>
+						<boolean id="ConstantMarking">true</boolean>
+						<int id="InitialState">0</int>
+					</class>
+					<class id="Mobius.AtomicModels.San.InputGatePanelObject">
+						<int id="ClassVersion">1</int>
+						<class id="Mobius.BaseClasses.BaseVertexClass">
+							<int id="ClassVersion">3</int>
+							<class id="Mobius.BaseClasses.BasePanelObjectClass">
+								<int id="ClassVersion">5</int>
+								<string id="Name">PickupUpdateForProcessing</string>
+								<boolean id="ContainsLabel">true</boolean>
+								<boolean id="IsLabelShown">true</boolean>
+							</class>
+							<point id="CenterPoint">
+								<int id="x">695</int>
+								<int id="y">235</int>
+							</point>
+						</class>
+						<boolean id="MirrorImage">false</boolean>
+						<string id="Predicate">
+							if (Controller_NumberOfTokens-&gt;Mark() &gt; 0)\n{\n  retur
+							n 1;\n} else\n{\n  return 0;\n}\n\n
+						</string>
+						<string id="Function">Controller_NumberOfTokens-&gt;Mark() -- ;</string>
+					</class>
+					<class id="Mobius.AtomicModels.San.OutputGatePanelObject">
+						<int id="ClassVersion">1</int>
+						<class id="Mobius.BaseClasses.BaseVertexClass">
+							<int id="ClassVersion">3</int>
+							<class id="Mobius.BaseClasses.BasePanelObjectClass">
+								<int id="ClassVersion">5</int>
+								<string id="Name">ProduceArrivalToken</string>
+								<boolean id="ContainsLabel">true</boolean>
+								<boolean id="IsLabelShown">true</boolean>
+							</class>
+							<point id="CenterPoint">
+								<int id="x">285</int>
+								<int id="y">235</int>
+							</point>
+						</class>
+						<boolean id="MirrorImage">false</boolean>
+						<string id="Function">
+							if (Controller_NumberOfTokens-&gt;Mark() &lt; 10)\n{\n  Cont
+							roller_NumberOfTokens-&gt;Mark()++;\n}\n
+						</string>
+					</class>
+					<class id="Mobius.AtomicModels.San.TimedActivityPanelObject">
+						<int id="ClassVersion">2</int>
+						<class id="Mobius.AtomicModels.San.ActivityPanelObject">
+							<int id="ClassVersion">1</int>
+							<class id="Mobius.BaseClasses.ExtendedBaseVertexClass">
+								<int id="ClassVersion">1</int>
+								<class id="Mobius.BaseClasses.BaseVertexClass">
+									<int id="ClassVersion">3</int>
+									<class id="Mobius.BaseClasses.BasePanelObjectClass">
+										<int id="ClassVersion">5</int>
+										<string id="Name">Controller_UpdateProcessing</string>
+										<boolean id="ContainsLabel">true</boolean>
+										<boolean id="IsLabelShown">true</boolean>
+									</class>
+									<point id="CenterPoint">
+										<int id="x">905</int>
+										<int id="y">235</int>
+									</point>
+								</class>
+							</class>
+							<int id="NumberOfCases">1</int>
+							<vector id="CaseDistributions">
+								<string id="0"></string>
+							</vector>
+						</class>
+						<class id="Mobius.BaseClasses.Distributions.DistributionFunction">
+							<int id="ClassVersion">1</int>
+							<string id="Name">Exponential</string>
+							<vector id="MetaParameters">
+							</vector>
+							<vector id="Parameters">
+								<string id="0">20.0</string>
+							</vector>
+						</class>
+						<string id="Activation"></string>
+						<string id="Reactivation"></string>
+					</class>
+					<class id="Mobius.AtomicModels.San.TimedActivityPanelObject">
+						<int id="ClassVersion">2</int>
+						<class id="Mobius.AtomicModels.San.ActivityPanelObject">
+							<int id="ClassVersion">1</int>
+							<class id="Mobius.BaseClasses.ExtendedBaseVertexClass">
+								<int id="ClassVersion">1</int>
+								<class id="Mobius.BaseClasses.BaseVertexClass">
+									<int id="ClassVersion">3</int>
+									<class id="Mobius.BaseClasses.BasePanelObjectClass">
+										<int id="ClassVersion">5</int>
+										<string id="Name">UpdateArrival</string>
+										<boolean id="ContainsLabel">true</boolean>
+										<boolean id="IsLabelShown">true</boolean>
+									</class>
+									<point id="CenterPoint">
+										<int id="x">135</int>
+										<int id="y">235</int>
+									</point>
+								</class>
+							</class>
+							<int id="NumberOfCases">1</int>
+							<vector id="CaseDistributions">
+								<string id="0"></string>
+							</vector>
+						</class>
+						<class id="Mobius.BaseClasses.Distributions.DistributionFunction">
+							<int id="ClassVersion">1</int>
+							<string id="Name">Exponential</string>
+							<vector id="MetaParameters">
+							</vector>
+							<vector id="Parameters">
+								<string id="0">10.0</string>
+							</vector>
+						</class>
+						<string id="Activation"></string>
+						<string id="Reactivation"></string>
+					</class>
+					<class id="Mobius.BaseClasses.BaseEdgeClass">
+						<int id="ClassVersion">3</int>
+						<int id="LineType">0</int>
+						<string id="StartVertex">ProduceArrivalToken</string>
+						<string id="FinishVertex">Controller_NumberOfTokens</string>
+						<boolean id="Arrows">false</boolean>
+						<vector id="PointList">
+							<point id="0">
+								<int id="x">280</int>
+								<int id="y">236</int>
+							</point>
+							<point id="1">
+								<int id="x">361</int>
+								<int id="y">175</int>
+							</point>
+						</vector>
+					</class>
+					<class id="Mobius.BaseClasses.BaseEdgeClass">
+						<int id="ClassVersion">3</int>
+						<int id="LineType">0</int>
+						<string id="StartVertex">Controller_NumberOfTokens</string>
+						<string id="FinishVertex">PickupUpdateForProcessing</string>
+						<boolean id="Arrows">false</boolean>
+						<vector id="PointList">
+							<point id="0">
+								<int id="x">483</int>
+								<int id="y">234</int>
+							</point>
+							<point id="1">
+								<int id="x">634</int>
+								<int id="y">218</int>
+							</point>
+						</vector>
+					</class>
+					<class id="Mobius.BaseClasses.BaseEdgeClass">
+						<int id="ClassVersion">3</int>
+						<int id="LineType">0</int>
+						<string id="StartVertex">UpdateArrival</string>
+						<string id="FinishVertex">ProduceArrivalToken</string>
+						<boolean id="Arrows">false</boolean>
+						<vector id="PointList">
+							<point id="0">
+								<int id="x">133</int>
+								<int id="y">235</int>
+							</point>
+							<point id="1">
+								<int id="x">225</int>
+								<int id="y">175</int>
+							</point>
+						</vector>
+					</class>
+					<class id="Mobius.BaseClasses.BaseEdgeClass">
+						<int id="ClassVersion">3</int>
+						<int id="LineType">0</int>
+						<string id="StartVertex">PickupUpdateForProcessing</string>
+						<string id="FinishVertex">Controller_UpdateProcessing</string>
+						<boolean id="Arrows">false</boolean>
+						<vector id="PointList">
+							<point id="0">
+								<int id="x">704</int>
+								<int id="y">235</int>
+							</point>
+							<point id="1">
+								<int id="x">796</int>
+								<int id="y">237</int>
+							</point>
+						</vector>
+					</class>
+				</class>
+				<vector id="LocalGlobalNamesList">
+				</vector>
+				<vector id="LocalGlobalTypesList">
+				</vector>
+				<boolean id="DisplayToolTips">true</boolean>
+			</class>
+		</class>
+		<class id="Mobius.AtomicModels.San.SanInfoClass">
+			<int id="ClassVersion">4</int>
+			<class id="Mobius.BaseClasses.BaseInfoClass">
+				<int id="ClassVersion">2</int>
+			</class>
+			<string id="CustomInitialization"></string>
+		</class>
+		<boolean id="Valid">true</boolean>
+	</class>
+</class>

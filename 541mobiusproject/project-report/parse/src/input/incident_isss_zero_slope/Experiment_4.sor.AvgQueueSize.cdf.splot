@@ -1,0 +1,147 @@
+;AvgQueueSize  pdf
+;at time -1
+New Graph
+Size 5 by 5
+
+Graph Font HELVETICA15
+
+Graph Title Probability Distribution Function (CDF)
+New Text 5.000000, 1.800000
+Variable name: AvgQueueSize
+Mean: 0.341328
+Variance: 0.457832
+
+Text Font HELVETICA11
+
+New Text 5.000000, 1.650000
+Project name: 541Project
+Study name: incident_study_zero_slope
+Experiment name: Experiment_4
+
+Text Font HELVETICA11
+
+New Text 5.000000, 1.500000
+
+Text Font HELVETICA11
+
+New Curve
+curve symbol diamond size 3
+curve type solid
+curve gray 0.8
+curve interpolation yhistogram
+
+New Points
+0, 0.745530034877339
+1, 0.935245036319106
+2, 0.983521806242379
+3, 0.995806794341005
+4, 0.998932954936213
+5, 0.999728468979988
+6, 0.999930903451708
+7, 0.999982416969159
+8, 0.999995525626659
+9, 0.999998861394786
+10, 0.999999710252535
+11, 0.999999926264197
+12, 0.999999981234317
+13, 0.999999995223496
+14, 0.999999998783852
+15, 0.999999999690154
+16, 0.999999999920948
+17, 0.99999999997977
+18, 0.99999999999479
+19, 0.999999999998641
+20, 0.999999999999636
+21, 0.999999999999898
+22, 0.999999999999969
+23, 0.999999999999989
+24, 0.999999999999996
+25, 0.999999999999998
+26, 0.999999999999999
+27, 1
+28, 1
+29, 1
+30, 1
+31, 1
+32, 1
+33, 1
+34, 1
+35, 1
+36, 1
+37, 1
+38, 1
+39, 1
+40, 1
+41, 1
+42, 1
+43, 1
+44, 1
+45, 1
+46, 1
+47, 1
+48, 1
+49, 1
+50, 1
+51, 1
+52, 1
+53, 1
+54, 1
+55, 1
+56, 1
+57, 1
+58, 1
+59, 1
+60, 1
+61, 1
+62, 1
+63, 1
+64, 1
+65, 1
+66, 1
+67, 1
+68, 1
+69, 1
+70, 1
+71, 1
+72, 1
+73, 1
+74, 1
+75, 1
+76, 1
+77, 1
+78, 1
+79, 1
+80, 1
+81, 1
+82, 1
+83, 1
+84, 1
+85, 1
+86, 1
+87, 1
+88, 1
+89, 1
+90, 1
+91, 1
+92, 1
+93, 1
+94, 1
+95, 1
+96, 1
+97, 1
+98, 1
+99, 1
+100, 1
+
+X Label AvgQueueSize - x
+X Font Helvetica12BI
+X Maximum 104
+X Minimum 0
+X Interval 10
+Y Label Probability - P(X = x)
+Y Font Helvetica12BI
+Y Maximum 1.05
+Y Minimum 0.00
+Y Interval 0.1
+Y numberstyle floating 2
+

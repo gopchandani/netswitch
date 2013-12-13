@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<class id="Mobius.Studies.RangeStudy.RangeStudyInterface">
+	<int id="ClassVersion">1</int>
+	<class id="Mobius.Studies.Common.BaseStudyInterface">
+		<int id="ClassVersion">1</int>
+		<class id="Mobius.BaseClasses.BaseInterfaceClass">
+			<int id="ClassVersion">3</int>
+			<string id="ModelName">astudy</string>
+			<class id="Mobius.Studies.RangeStudy.RangeStudyEditor">
+				<int id="ClassVersion">2</int>
+				<class id="Mobius.Studies.Common.BaseStudyEditor">
+					<int id="ClassVersion">4</int>
+					<class id="Mobius.BaseClasses.BaseEditorClass">
+						<int id="ClassVersion">3</int>
+						<boolean id="HasPanel">false</boolean>
+						<vector id="LocalGlobalNamesList">
+						</vector>
+						<vector id="LocalGlobalTypesList">
+						</vector>
+						<boolean id="DisplayToolTips">true</boolean>
+					</class>
+					<string id="FullPath">/home/gopchandani/MobiusProject/san-attempt/Study/astudy/</string>
+					<string id="PVModelName">areward</string>
+					<vector id="ActiveExpVector">
+						<boolean id="0">true</boolean>
+					</vector>
+					<vector id="GVNameVector">
+					</vector>
+					<vector id="GVTypeStringVector">
+					</vector>
+				</class>
+				<int id="VectorLength">0</int>
+			</class>
+			<class id="Mobius.Studies.RangeStudy.RangeStudyInfoClass">
+				<int id="ClassVersion">1</int>
+				<class id="Mobius.Studies.RangeStudy.RangeStudyInfoClass">
+					<int id="ClassVersion">1</int>
+					<class id="Mobius.BaseClasses.BaseInfoClass">
+						<int id="ClassVersion">2</int>
+					</class>
+				</class>
+			</class>
+			<boolean id="Valid">true</boolean>
+		</class>
+	</class>
+</class>

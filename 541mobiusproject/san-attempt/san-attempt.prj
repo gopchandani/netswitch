@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<class id="Mobius.ProjectManager.ProjectInfo">
+	<int id="ClassVersion">8</int>
+	<string id="TheProjectName">san-attempt</string>
+	<string id="LastSavedByMobius">2.4</string>
+	<vector id="AtomicNames">
+		<string id="0">one_controller_one_aggregator</string>
+	</vector>
+	<vector id="AtomicFormalismTypes">
+		<string id="0">SAN Model</string>
+	</vector>
+	<int id="AtomicStatusLength">1</int>
+	<class id="Mobius.ProjectManager.ModelStatus">
+		<int id="ClassVersion">2</int>
+		<boolean id="Modified">true</boolean>
+		<string id="VersionNumber">28</string>
+	</class>
+	<vector id="ComposedNames">
+	</vector>
+	<vector id="ComposedFormalismTypes">
+	</vector>
+	<int id="ComposedChildrenLength">0</int>
+	<int id="ComposedStatusLength">0</int>
+	<vector id="RewardNames">
+		<string id="0">areward</string>
+	</vector>
+	<vector id="RewardFormalismTypes">
+		<string id="0">Performance Variable Model</string>
+	</vector>
+	<int id="RewardChildrenLength">1</int>
+	<vector id="RewardChildVector">
+		<string id="0">one_controller_one_aggregator</string>
+	</vector>
+	<int id="RewardStatusLength">1</int>
+	<class id="Mobius.ProjectManager.ModelStatus">
+		<int id="ClassVersion">2</int>
+		<boolean id="Modified">false</boolean>
+		<string id="VersionNumber">47</string>
+	</class>
+	<vector id="StudyNames">
+		<string id="0">astudy</string>
+	</vector>
+	<vector id="StudyFormalismTypes">
+		<string id="0">Range Study</string>
+	</vector>
+	<int id="StudyChildrenLength">1</int>
+	<vector id="StudyChildVector">
+		<string id="0">areward</string>
+	</vector>
+	<int id="StudyStatusLength">1</int>
+	<class id="Mobius.ProjectManager.ModelStatus">
+		<int id="ClassVersion">2</int>
+		<boolean id="Modified">false</boolean>
+		<string id="VersionNumber">1</string>
+	</class>
+	<vector id="TransformerNames">
+		<string id="0">assg</string>
+	</vector>
+	<vector id="TransformerFormalismTypes">
+		<string id="0">State Space Generator</string>
+	</vector>
+	<int id="TransformerChildrenLength">1</int>
+	<vector id="TransformerChildVector">
+		<string id="0">astudy</string>
+	</vector>
+	<int id="TransformerStatusLength">1</int>
+	<class id="Mobius.ProjectManager.ModelStatus">
+		<int id="ClassVersion">2</int>
+		<boolean id="Modified">false</boolean>
+		<string id="VersionNumber">1</string>
+	</class>
+	<vector id="SolverNames">
+		<string id="0">atrs</string>
+		<string id="1">isss</string>
+	</vector>
+	<vector id="SolverFormalismTypes">
+		<string id="0">Transient Solver</string>
+		<string id="1">Iterative Steady State Solver</string>
+	</vector>
+	<int id="SolverChildrenLength">2</int>
+	<vector id="SolverChildVector">
+		<string id="0">assg</string>
+	</vector>
+	<vector id="SolverChildVector">
+		<string id="0">assg</string>
+	</vector>
+	<int id="SolverStatusLength">2</int>
+	<class id="Mobius.ProjectManager.ModelStatus">
+		<int id="ClassVersion">2</int>
+		<boolean id="Modified">true</boolean>
+		<string id="VersionNumber">1</string>
+	</class>
+	<class id="Mobius.ProjectManager.ModelStatus">
+		<int id="ClassVersion">2</int>
+		<boolean id="Modified">true</boolean>
+		<string id="VersionNumber">1</string>
+	</class>
+	<string id="UserDefinedLibrary"></string>
+	<string id="UserDefinedHeader"></string>
+	<class id="Mobius.AtomicModels.San.SanTypeManager">
+		<int id="ClassVersion">1</int>
+		<int id="typeListModelSize">0</int>
+	</class>
+</class>

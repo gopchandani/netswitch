@@ -1,0 +1,43 @@
+Mobius trs Version 2.4, 
+Copyright (c) William H. Sanders and Univ. of Illinois 1994-2010
+
+******************************************************************************
+                           Mobius TRANSIENT SOLVER 
+
+                          TRANSIENT SOLVER RESULTS
+******************************************************************************
+
+Started: Thu Nov  7 22:11:00 2013
+
+Project name: san-attempt
+Study name: astudy
+State space name: assg
+Experiment name: Experiment_1
+
+Global variable settings for this experiment:
+
+Verbosity: 0
+Accuracy: 1.000000e-09
+Time points: 10000.000000
+Computation Time (seconds): 0.164011
+User Time (seconds): 0.160010
+System Time (seconds): 0.004001
+Rate of Poisson process: 20.000000
+Number of states in process: 11
+Number of states with reward: 10
+Number of time points: 1
+
+      Time Point       Left Trunc.      # Iterations          Error     
+   ---------------   ---------------   ---------------   ---------------
+      10000.000000            196868            204429      1.000000e-09
+
+******************************************************************************
+Performance variable :  areward
+Time                 :  10000.000000
+Mean                 :  5.000000e+00
+Variance             :  1.000000e+01
+Plot files    (pdf)  :  Experiment_1.trs.areward.10000.000.pdf.splot
+              (cdf)  :  Experiment_1.trs.areward.10000.000.cdf.splot
+******************************************************************************
+Finished: Thu Nov  7 22:11:00 2013
+

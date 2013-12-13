@@ -1,0 +1,57 @@
+;AvgPeerDistance  pdf
+;at time -1
+New Graph
+Size 5 by 5
+
+Graph Font HELVETICA15
+
+Graph Title Probability Density Function (pdf)
+New Text 0.500000, 1.800000
+Variable name: AvgPeerDistance
+Mean: 5.500000
+Variance: 8.250000
+
+Text Font HELVETICA11
+
+New Text 0.500000, 1.650000
+Project name: 541Project
+Study name: incident_study_zero_slope
+Experiment name: Experiment_35
+
+Text Font HELVETICA11
+
+New Text 0.500000, 1.500000
+
+Text Font HELVETICA11
+
+New Curve
+curve symbol diamond size 3
+curve type solid
+curve gray 0.8
+curve interpolation yhistogram
+
+New Points
+0, 3.19839640883224e-18
+1, 0.100000000709779
+2, 0.099999999996934
+3, 0.0999999998135157
+4, 0.0999999997693924
+5, 0.0999999997844096
+6, 0.0999999998310018
+7, 0.0999999998969039
+8, 0.0999999999757201
+9, 0.100000000063734
+10, 0.100000000158609
+
+X Label AvgPeerDistance - x
+X Font Helvetica12BI
+X Maximum 10.4
+X Minimum 0
+X Interval 1
+Y Label Probability - P(X = x)
+Y Font Helvetica12BI
+Y Maximum 1.05
+Y Minimum 0.00
+Y Interval 0.1
+Y numberstyle floating 2
+

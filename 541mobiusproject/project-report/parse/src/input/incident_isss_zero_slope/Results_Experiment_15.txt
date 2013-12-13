@@ -1,0 +1,58 @@
+Mobius sor Version 2.4, 
+Copyright (c) William H. Sanders and Univ. of Illinois 1994-2010
+
+******************************************************************************
+                  Mobius ITERATIVE SOR STEADY STATE SOLVER 
+
+                  ITERATIVE SOR STEADY STATE SOLVER RESULTS
+******************************************************************************
+
+Started: Tue Nov 19 22:55:48 2013
+
+Project name: 541Project
+Study name: incident_study_zero_slope
+State space name: incident_ssg_zero_slope
+Experiment name: Experiment_15
+
+Global variable settings for this experiment:
+	ArrivalRate = 0.1
+	CostPerLevel = 1.6000000000000003
+	DistributionIntercept = 5.0
+	DistributionSlope = 0.0
+	MaxQueueSize = 100
+
+Verbosity: 0
+Accuracy: 1.000000e-09
+Weight: 1.000000
+Max iterations: 300000
+Matrix diagonalization off.
+
+Computation Time (seconds): 0.140000
+User Time (seconds): 0.140000
+System Time (seconds): -0.000000
+Number of states in process: 1011
+Number of non-zero elements: 12111
+Solution converged in 510 iterations.
+Maximum difference: 9.925806e-10
+
+Computing the performance variables
+******************************************************************************
+Performance variable :  AvgQueueSize
+Mean                 :  2.109117e+00
+Variance             :  6.557502e+00
+Plot files    (pdf)  :  Experiment_15.sor.AvgQueueSize.pdf.splot
+              (cdf)  :  Experiment_15.sor.AvgQueueSize.cdf.splot
+******************************************************************************
+Performance variable :  AvgPeerDistance
+Mean                 :  5.500000e+00
+Variance             :  8.250000e+00
+Plot files    (pdf)  :  Experiment_15.sor.AvgPeerDistance.pdf.splot
+              (cdf)  :  Experiment_15.sor.AvgPeerDistance.cdf.splot
+******************************************************************************
+Performance variable :  BlockingProbability
+Mean                 :  1.670612e-16
+Variance             :  1.670612e-16
+Plot files    (pdf)  :  Experiment_15.sor.BlockingProbability.pdf.splot
+              (cdf)  :  Experiment_15.sor.BlockingProbability.cdf.splot
+Finished: Tue Nov 19 22:55:48 2013
+
