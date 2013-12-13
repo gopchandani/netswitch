@@ -4,6 +4,7 @@ Created on Dec 10, 2013
 @author: rakesh
 '''
 
+import logging
 import random
 import simpy
 
@@ -82,21 +83,21 @@ class Update(object):
        
         with self.aggregator.request() as req:
             
-            print('%7.4f: Waiting' % (self.env.now))
+            logging.info('%7.4f: Waiting' % (self.env.now))
             
             #Wait for the aggregator to become available
             yield req
             
             start = self.env.now
-            print('%7.4f: Starting Processing' % start)
+            logging.info('%7.4f: Starting Processing' % start)
             
             #Yield that amount of time
             yield self.env.timeout(random.expovariate(self.service_rate))
             
             end = self.env.now
-            print('%7.4f: Ending Processing' % end)            
+            logging.info('%7.4f: Ending Processing' % end)            
             
-            print('Took: %7.4f' % (end - start))
+            logging.info('Took: %7.4f' % (end - start))
             
         
         
