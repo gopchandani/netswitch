@@ -67,10 +67,10 @@ class Update(object):
             yield self.env.timeout(random.expovariate(self.arrival_rate))
             
             #Process the update
-            self.env.process(self.update_processing())
+            self.env.process(self.update_processing(i))
                         
         
-    def update_processing(self):
+    def update_processing(self, update_num):
     
         #Flip a coin on as to how far the ripple effects of this update will go.        
         #TODO: Make this randomself.aggregator_hops_affected = random.uniform(0, 10)
@@ -83,7 +83,7 @@ class Update(object):
        
         with self.aggregator.request() as req:
             
-            logging.info('%7.4f: Waiting' % (self.env.now))
+            logging.info('Me: %d - Time: %7.4f -- Waiting' % (update_num, self.env.now))
             
             #Wait for the aggregator to become available
             yield req
@@ -95,9 +95,8 @@ class Update(object):
             yield self.env.timeout(random.expovariate(self.service_rate))
             
             end = self.env.now
-            logging.info('%7.4f: Ending Processing' % end)            
             
-            logging.info('Took: %7.4f' % (end - start))
+            logging.info('Me: %d - Time Taken: %7.4f' % (update_num, (end-start)))
             
         
         
