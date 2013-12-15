@@ -10,7 +10,7 @@ from Driver import Driver
 if __name__ == '__main__':
     
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
-    driver = Driver()
+    driver = Driver(10)
     driver.run_simulation()
     driver.process_output()
     

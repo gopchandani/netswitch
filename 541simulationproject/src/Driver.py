@@ -7,17 +7,26 @@ Created on Dec 10, 2013
 import logging
 import simpy
 import numpy
+import random
 from Update import Update
 
 class Driver(object):
-    def __init__ (self):
-        self.env = simpy.Environment()
-        self.update = Update(self.env, 0.1, 1000, 1.0)
+    def __init__ (self, num_iterations):
+        
+        self.num_iterations = num_iterations
+        self.env = None
+        self.avg_wait_times = []
+
 
     def run_simulation(self):
-        self.env.run(until=10000)
-
-    
+        
+        for i in range(self.num_iterations):
+            random.seed()
+            self.env = simpy.Environment()
+            self.update = Update(self.env, 0.1, 100, 1.0)
+            self.env.run(until=10000)
+            self.avg_wait_times.append(numpy.average(self.update.update_wait_times))
+            
     def process_output(self):
-        print numpy.average(self.update.update_wait_times)
+        print self.avg_wait_times
 
