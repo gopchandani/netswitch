@@ -23,7 +23,7 @@ class Driver(object):
         for i in range(self.num_iterations):
             random.seed()
             self.env = simpy.Environment()
-            self.update = Update(self.env, 0.1, 100, 1.0)
+            self.update = Update(self.env, 1.0, 0.1, 100)
             self.env.run(until=10000)
             self.avg_wait_times.append(numpy.average(self.update.update_wait_times))
             

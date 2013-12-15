@@ -13,24 +13,6 @@ class Update(object):
     '''
     This class contains methods for simulation Rule Updates.
     '''
-
-    def __init__(self, env, per_hop_service_rate, num_updates, update_arrival_rate):
-        '''
-        Constructor
-        '''
-        self.env = env
-        self.proc = env.process(self.update_generation())
-        self.per_hop_service_rate = per_hop_service_rate
-        self.num_updates = num_updates
-        self.arrival_rate = update_arrival_rate
-        
-        self.aggregator_hops_affected = None
-        self.service_rate = None
-        
-        
-        #Define the resources that updates are going to use:
-        #TODO: Allow for multiple hops to be.
-        self.aggregator = simpy.Resource(self.env, capacity=1)
         
     def update_generation(self):
         for i in range(self.num_updates):
@@ -42,7 +24,8 @@ class Update(object):
     This class contains methods for simulation Rule Updates.
     '''
 
-    def __init__(self, env, per_hop_service_rate, num_updates, update_arrival_rate):
+    def __init__(self, env, update_arrival_rate, per_hop_service_rate, num_updates):
+
         '''
         Constructor
         '''
