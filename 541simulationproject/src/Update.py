@@ -13,16 +13,6 @@ class Update(object):
     '''
     This class contains methods for simulation Rule Updates.
     '''
-        
-    def update_generation(self):
-        for i in range(self.num_updates):
-            
-            #Wait for a random amount of time before generating the next update
-            yield self.env.timeout(random.expovariate(self.arrival_rate))
-            
-    '''
-    This class contains methods for simulation Rule Updates.
-    '''
 
     def __init__(self, env, update_arrival_rate, per_hop_service_rate, num_updates):
 
