@@ -60,6 +60,9 @@ class Update(object):
         #TODO: Allow for multiple hops to be.
         self.aggregator = simpy.Resource(self.env, capacity=1)
         
+        #Output vectors
+        self.update_wait_times = []
+        
     def update_generation(self):
         for i in range(self.num_updates):
             
@@ -89,12 +92,13 @@ class Update(object):
             yield req
             
             start = self.env.now
-            logging.info('%7.4f: Starting Processing' % start)
             
             #Yield that amount of time
             yield self.env.timeout(random.expovariate(self.service_rate))
             
             end = self.env.now
+            
+            self.update_wait_times.append(end-start)
             
             logging.info('Me: %d - Time Taken: %7.4f' % (update_num, (end-start)))
             
