@@ -34,7 +34,13 @@ class Driver(object):
         for i in range(self.num_iterations):
             random.seed()
             self.env = simpy.Environment()
-            self.update = Update(self.env, param1, param2, 10)
+            #Flip a coin on as to how far the ripple effects of this update will go.        
+            #TODO: Make this randomself.aggregator_hops_affected = random.uniform(0, 10)
+            #TODO: Allow for multiple hops to be.
+            
+            aggregators = simpy.Resource(self.env, capacity=1)
+            
+            self.update = Update(self.env, param1, param2, 1.0, aggregators, 10)
             self.env.run(until=10000)
             self.avg_wait_times[(param1, param2)]['iterations_output'].append(np.average(self.update.update_wait_times))
         
