@@ -14,12 +14,14 @@ import matplotlib.pyplot as plt
 from Update import Update
 
 class Driver(object):
-    def __init__ (self, num_iterations):
+    def __init__ (self, num_iterations, num_updates_per_iteration):
         
         self.param1 = [1.0]#np.arange(1.0, 10.0, 1.0)
         self.param2 = np.arange(0.1, 2.0, 0.2)
         
         self.num_iterations = num_iterations
+        self.num_updates_per_iteration = num_updates_per_iteration
+        
         self.env = None
         
         self.avg_wait_times = {}
@@ -38,8 +40,10 @@ class Driver(object):
             #TODO: Allow for multiple hops to be.
             
             aggregators = [simpy.Resource(self.env, capacity=1)]
+                        
+            self.update = Update(self.env, param1, param2, 1.0, aggregators, self.num_updates_per_iteration)
             
-            self.update = Update(self.env, param1, param2, 1.0, aggregators, 10)
+            
             self.env.run(until=10000)
             self.avg_wait_times[(param1, param2)]['iterations_output'].append(np.average(self.update.update_wait_times))
         

@@ -8,7 +8,7 @@ from Driver import Driver
 
 if __name__ == '__main__':
     
-    driver = Driver(10)
+    driver = Driver(10, 10)
 #    driver.run_simulation()
 #    driver.process_output()
 
