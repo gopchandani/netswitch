@@ -4,7 +4,6 @@ Created on Dec 10, 2013
 @author: rakesh
 '''
 
-import logging
 import random
 import simpy
 
@@ -42,25 +41,29 @@ class Update(object):
                         
         
     def update_processing(self, update_num):
-            
-       
-        with self.aggregators.request() as req:
-            
-            logging.info('Me: %d - Time: %7.4f -- Waiting' % (update_num, self.env.now))
-            
-            #Wait for the aggregator to become available
-            yield req
-            
-            start = self.env.now
-            
-            #Yield that amount of time
-            yield self.env.timeout(random.expovariate(self.per_hop_service_rate))
-            
-            end = self.env.now
-            
-            self.update_wait_times.append(end-start)
-            
-            logging.info('Me: %d - Time Taken: %7.4f' % (update_num, (end-start)))
-            
         
+        #Update just got created. Logs the time of creation
+        self.creation_time = self.env.now
+        
+        #Log the time when you are about to start receiving service
+        start = self.env.now
+        
+        #Go through all the servicer(s)...
+        for aggregator in self.aggregators:
+
+            with aggregator.request() as req:
+
+                #Wait for them to be available and provide service
+                yield req
+                
+                #Yield for amount of time it takes to receive service from this guy.
+                yield self.env.timeout(random.expovariate(self.per_hop_service_rate))
+                
+                
+        end = self.env.now
+                
+        self.update_wait_times.append(end - start)
+                
+                
+            
         

@@ -5,8 +5,6 @@ Created on Dec 10, 2013
 '''
 
 import random
-import logging
-
 import simpy
 
 import numpy as np
@@ -18,8 +16,8 @@ from Update import Update
 class Driver(object):
     def __init__ (self, num_iterations):
         
-        self.param1 = [10.0]#np.arange(1.0, 10.0, 1.0)
-        self.param2 = np.arange(1.0, 10.0, 1.0)
+        self.param1 = [1.0]#np.arange(1.0, 10.0, 1.0)
+        self.param2 = np.arange(0.1, 2.0, 0.2)
         
         self.num_iterations = num_iterations
         self.env = None
@@ -34,11 +32,12 @@ class Driver(object):
         for i in range(self.num_iterations):
             random.seed()
             self.env = simpy.Environment()
+            
             #Flip a coin on as to how far the ripple effects of this update will go.        
             #TODO: Make this randomself.aggregator_hops_affected = random.uniform(0, 10)
             #TODO: Allow for multiple hops to be.
             
-            aggregators = simpy.Resource(self.env, capacity=1)
+            aggregators = [simpy.Resource(self.env, capacity=1)]
             
             self.update = Update(self.env, param1, param2, 1.0, aggregators, 10)
             self.env.run(until=10000)
