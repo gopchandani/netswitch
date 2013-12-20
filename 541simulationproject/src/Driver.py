@@ -11,7 +11,7 @@ import numpy as np
 import scipy.stats as ss
 import matplotlib.pyplot as plt
 
-from Update import Update
+from Controller import Controller
 
 class Driver(object):
     def __init__ (self, num_iterations, num_updates_per_iteration):
@@ -23,38 +23,29 @@ class Driver(object):
         self.num_updates_per_iteration = num_updates_per_iteration
         
         self.env = None
-        
         self.avg_wait_times = {}
-
 
     def run_iterations(self, param1, param2):
         self.avg_wait_times[(param1, param2)]  = {}
         self.avg_wait_times[(param1, param2)]['iterations_output'] = []
-        
         for i in range(self.num_iterations):
             random.seed()
             self.env = simpy.Environment()
-            
             #Flip a coin on as to how far the ripple effects of this update will go.        
             #TODO: Make this randomself.aggregator_hops_affected = random.uniform(0, 10)
             #TODO: Allow for multiple hops to be.
-            
-            aggregators = [simpy.Resource(self.env, capacity=1)]
-                        
-            self.update = Update(self.env, param1, param2, 1.0, aggregators, self.num_updates_per_iteration)
-            
-            
-            self.env.run(until=10000)
-            self.avg_wait_times[(param1, param2)]['iterations_output'].append(np.average(self.update.update_wait_times))
+            self.switch = Controller(self.env, param1, param2)
+            self.env.run(until=1000)
+            self.avg_wait_times[(param1, param2)]['iterations_output'].append(np.average(self.switch.update_processing_times))
         
         self.avg_wait_times[(param1, param2)]['average'] = np.average(self.avg_wait_times[(param1, param2)]['iterations_output'])
         print 'Param1:', param1, 'Param2:', param2, 'Average Wait Time:', self.avg_wait_times[(param1, param2)]['average']
         
     def run_simulation(self):
+
         for param1 in self.param1:
             for param2 in self.param2:
-                self.run_iterations(param1, param2)
-                             
+                self.run_iterations(param1, param2)                             
     
     def prepare_goods_for_graph(self):                     
         
