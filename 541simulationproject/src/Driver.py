@@ -28,18 +28,19 @@ class Driver(object):
         self.avg_wait_times = {}
         
     def prepare_topology(self):
+        #Flip a coin on as to how far the ripple effects of this update will go.        
+        #TODO: Make this randomself.aggregator_hops_affected = random.uniform(0, 10)
+        #TODO: Allow for multiple hops to be.
+
         #agg = Aggregator(self.env, 0.1, 0.1)
-        pass
+        self.switch = Controller(self.env, self.current_param[0], self.current_param[1])
         
     def setup_environment(self):
         
         random.seed()
         self.env = simpy.Environment()
-        #Flip a coin on as to how far the ripple effects of this update will go.        
-        #TODO: Make this randomself.aggregator_hops_affected = random.uniform(0, 10)
-        #TODO: Allow for multiple hops to be.
-        self.switch = Controller(self.env, self.current_param[0], self.current_param[1])
-        self.env.run(until=1000)
+        self.prepare_topology()
+        
             
             
     def run_iterations(self):
@@ -47,14 +48,13 @@ class Driver(object):
         self.avg_wait_times[self.current_param]['iterations_output'] = []
         for i in range(self.num_iterations):
             self.setup_environment()
+            self.env.run(until=1000)
             self.avg_wait_times[self.current_param]['iterations_output'].append(np.average(self.switch.update_processing_times))
         
         self.avg_wait_times[self.current_param]['average'] = np.average(self.avg_wait_times[self.current_param]['iterations_output'])
         print 'Param1:', self.current_param[0], 'Param2:', self.current_param[1], 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
                 
     def run_simulation(self):
-        #Prepare the topology
-        self.prepare_topology()
         
         #Loop over possible values of parameters
         for param1 in self.param1:
