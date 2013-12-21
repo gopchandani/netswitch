@@ -23,13 +23,9 @@ class Controller(object):
         self.local_generation_processor = env.process(self.local_update_generation())
         self.local_processing_processor = env.process(self.local_update_processing())
 
-        
-        self.local_processing_unit = simpy.Resource(self.env, capacity=1)
-        
         self.updates_created = 0
         self.updates_processed = 0
-        
-        self.current_update_num = 0
+        self.total_update_wait_time = 0.0
         self.total_update_processing_time = 0.0
                 
         self.local_pipe = simpy.Store(self.env)
@@ -48,34 +44,27 @@ class Controller(object):
             
             #Update stats
             self.updates_created = self.updates_created + 1
-            self.current_update_num = self.current_update_num + 1
             
                 
     def local_update_processing(self):        
-        
         while True:
             
             update = yield self.local_pipe.get()
             self.updates_processed = self.updates_processed + 1
-            self.current_update_num = self.current_update_num - 1    
             
             #Only process if the update was created before right now.
             if self.env.now >= update['creation_time']:
                 
                 #Store the time the update waited for before it was processed
                 update['wait_time'] = self.env.now - update['creation_time']
+                self.total_update_wait_time += update['wait_time']
                 
                 #Yield for amount of time it takes to process locally
                 yield self.env.timeout(random.expovariate(self.update_service_rate))
                                 
                 #Store the total
                 update['processing_time'] = self.env.now - update['creation_time']
-                
                 self.total_update_processing_time += update['processing_time']
-
-#                print('here 1')
-#                print 'wait_time:', update['wait_time']
-#                print 'processing_time:', update['processing_time']
                 
             else:
                 print('here 2')

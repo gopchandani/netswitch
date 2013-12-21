@@ -25,6 +25,8 @@ class Driver(object):
         self.num_updates_per_iteration = num_updates_per_iteration
         
         self.env = None
+
+        self.avg_processing_times = {}        
         self.avg_wait_times = {}
         
     def prepare_topology(self):
@@ -55,15 +57,27 @@ class Driver(object):
     def run_iterations(self):
         self.avg_wait_times[self.current_param]  = {}
         self.avg_wait_times[self.current_param]['iterations_output'] = []
+ 
+        self.avg_processing_times[self.current_param]  = {}
+        self.avg_processing_times[self.current_param]['iterations_output'] = []
+        
         for i in range(self.num_iterations):
             self.setup_environment()
             self.env.run(until=1000)
 
+            avg_wait_time = self.switch.total_update_wait_time / self.switch.updates_processed
+            self.avg_wait_times[self.current_param]['iterations_output'].append(avg_wait_time)
+
             avg_processing_time = self.switch.total_update_processing_time / self.switch.updates_processed
-            self.avg_wait_times[self.current_param]['iterations_output'].append(avg_processing_time)
+            self.avg_processing_times[self.current_param]['iterations_output'].append(avg_processing_time)
+
         
         self.avg_wait_times[self.current_param]['average'] = np.average(self.avg_wait_times[self.current_param]['iterations_output'])
         print 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
+        
+        self.avg_processing_times[self.current_param]['average'] = np.average(self.avg_processing_times[self.current_param]['iterations_output'])
+        print 'Average Processing Time:', self.avg_processing_times[self.current_param]['average']
+               
                 
     def run_simulation(self):
         
@@ -71,7 +85,7 @@ class Driver(object):
         for param1 in self.param1:
             for param2 in self.param2:
                 self.current_param = (param1, param2)
-                print 'Param1:', self.current_param[0], 'Param2:', self.current_param[1], 
+                print '--- Param1:', self.current_param[0], 'Param2:', self.current_param[1]
                 
                 self.run_iterations()
     
