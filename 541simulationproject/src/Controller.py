@@ -56,13 +56,14 @@ class Controller(object):
                 self.total_update_processing_time += curr_proessing_time
                 
                 
-                #Decide if this update needs remote processing
-                send_to_aggregator = random.randint(0,1)  
-                if send_to_aggregator == 1:
+                
+                if self.aggregator_link != None:
                     
-                    #If it does, put it on the appropriate link
-                    self.aggregator_link.put(update)
+                    #Decide if this update needs remote processing
+                    send_to_aggregator = random.randint(0,1)  
+                    if send_to_aggregator == 1:
+                        
+                        #If it does, put it on the appropriate link
+                        self.aggregator_link.put(update)
                 
                 
-            else:
-                print('here 2')

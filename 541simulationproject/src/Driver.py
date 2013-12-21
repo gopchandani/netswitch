@@ -12,7 +12,6 @@ import scipy.stats as ss
 import matplotlib.pyplot as plt
 
 from Controller import Controller
-from Aggregator import Aggregator
 from Link import Link
 
 class Driver(object):
@@ -35,16 +34,14 @@ class Driver(object):
         #TODO: Make this randomself.aggregator_hops_affected = random.uniform(0, 10)
         #TODO: Allow for multiple hops to be.
 
-        #Build a switch        
-        self.switch = Controller(self.env, self.current_param[0], self.current_param[1])
+        #Build a controller        
+        self.controller = Controller(self.env, self.current_param[0], self.current_param[1])
         
-        #Build an aggregator
-        self.aggregator = Aggregator(self.env, self.current_param[1])
-
-        #Put a link between the two
-        link = Link(self.env, 10)
-        self.switch.aggregator_link = link
-        self.aggregator.controller_link = link
+        #Build an aggregator 
+        self.aggregator = Controller(self.env, self.current_param[0], self.current_param[1])
+        
+        #Put a link between the two        
+        self.controller.aggregator_link = self.aggregator.processing_pipe
         
     
     def update_generator(self):
@@ -59,10 +56,10 @@ class Driver(object):
             update['wait_times'] = []
             update['processing_times'] = []
             
-            self.switch.processing_pipe.put(update)
+            self.controller.processing_pipe.put(update)
             
             #Update stats
-            self.switch.updates_created = self.switch.updates_created + 1
+            self.controller.updates_created = self.controller.updates_created + 1
                         
     def setup_environment(self):
         
@@ -83,10 +80,10 @@ class Driver(object):
             self.setup_environment()
             self.env.run(until=100)
 
-            avg_wait_time = self.switch.total_update_wait_time / self.switch.updates_processed
+            avg_wait_time = self.controller.total_update_wait_time / self.controller.updates_processed
             self.avg_wait_times[self.current_param]['iterations_output'].append(avg_wait_time)
 
-            avg_processing_time = self.switch.total_update_processing_time / self.switch.updates_processed
+            avg_processing_time = self.controller.total_update_processing_time / self.controller.updates_processed
             self.avg_processing_times[self.current_param]['iterations_output'].append(avg_processing_time)
 
         
