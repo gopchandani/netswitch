@@ -22,7 +22,6 @@ class Controller(object):
         self.env = env
         self.update_processor = env.process(self.update_processing())
 
-        self.updates_created = 0
         self.updates_processed = 0
         self.total_update_wait_time = 0.0
         self.total_update_processing_time = 0.0
@@ -35,14 +34,18 @@ class Controller(object):
         while True:
             
             update = yield self.processing_pipe.get()
+            
+            update_arrival_time = self.env.now
+            update.hop_arrival_times.append(update_arrival_time)
+            
             self.updates_processed = self.updates_processed + 1
             
             #Only process if the update was created before right now.
-            if self.env.now >= update['hop_creation_time']:
+            if self.env.now >= update.creation_time:
                 
                 #Store the time the update waited for before it was processed
-                curr_wait_time = self.env.now - update['hop_creation_time']
-                update['wait_times'].append(curr_wait_time)
+                curr_wait_time = self.env.now - update_arrival_time
+                update.hop_wait_times.append(curr_wait_time)
 
                 self.total_update_wait_time += curr_wait_time
                 
@@ -50,8 +53,8 @@ class Controller(object):
                 yield self.env.timeout(random.expovariate(self.update_service_rate))
                                 
                 #Store the total
-                curr_proessing_time = self.env.now - update['hop_creation_time']
-                update['processing_times'].append(curr_proessing_time)
+                curr_proessing_time = self.env.now - update_arrival_time
+                update.hop_processing_times.append(curr_proessing_time)
                 
                 self.total_update_processing_time += curr_proessing_time
                 
