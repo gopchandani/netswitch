@@ -18,7 +18,7 @@ class Driver(object):
     def __init__ (self, num_iterations, num_updates_per_iteration):
         
         self.param1 = [1.0]#np.arange(1.0, 10.0, 1.0)
-        self.param2 = [1.1]#np.arange(0.1, 2.0, 0.2)
+        self.param2 = [1.0]#np.arange(0.1, 2.0, 0.2)
         self.current_param = ()
         
         self.num_iterations = num_iterations
