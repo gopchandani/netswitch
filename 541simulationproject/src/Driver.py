@@ -15,14 +15,14 @@ from Controller import Controller
 from Update import Update
 
 class Driver(object):
-    def __init__ (self, num_iterations, num_updates_per_iteration):
+    def __init__ (self, num_iterations, time_until):
         
-        self.param1 = [1.0]#np.arange(1.0, 10.0, 1.0)
+        self.param1 = np.arange(0.01, 2.0, 0.1)
         self.param2 = [1.0]#np.arange(0.1, 2.0, 0.2)
         self.current_param = ()
         
         self.num_iterations = num_iterations
-        self.num_updates_per_iteration = num_updates_per_iteration
+        self.time_until = time_until
         
         self.env = None
 
@@ -33,14 +33,16 @@ class Driver(object):
         
     def prepare_topology(self):
 
-        #Build a controller        
-        self.controller = Controller(self.env, self.current_param[0], self.current_param[1])
+        #Build controllers        
+        self.controller1 = Controller(self.env, self.current_param[0], self.current_param[1])
+        self.controller2 = Controller(self.env, self.current_param[0], self.current_param[1])
         
         #Build an aggregator 
         self.aggregator = Controller(self.env, self.current_param[0], self.current_param[1])
         
         #Put a link between the two        
-        self.controller.aggregator_link = self.aggregator.processing_pipe
+        self.controller1.aggregator_link = self.aggregator.processing_pipe
+        self.controller2.aggregator_link = self.aggregator.processing_pipe
         
     
     def update_generator(self):
@@ -50,12 +52,14 @@ class Driver(object):
             yield self.env.timeout(random.expovariate(self.current_param[0]))
                         
             #Put things on the local pipe
-            update = Update(self.env)
-            
-            update.hop(self.controller.processing_pipe)
-            
+            update = Update(self.env)            
+            update.hop(self.controller1.processing_pipe)
             self.updates.append(update)
-            
+
+            update = Update(self.env)            
+            update.hop(self.controller2.processing_pipe)
+            self.updates.append(update)
+                        
                         
     def setup_environment(self):
         
@@ -72,7 +76,7 @@ class Driver(object):
 
         for i in range(self.num_iterations):
             self.setup_environment()
-            self.env.run(until=100)
+            self.env.run(until = self.time_until)
             self.stats_collect() 
         
     def stats_init(self):
@@ -104,10 +108,15 @@ class Driver(object):
     def stats_aggregate(self):
  
         self.avg_wait_times[self.current_param]['average'] = np.average(self.avg_wait_times[self.current_param]['iterations_output'])
+        self.avg_wait_times[self.current_param]['sd'] = np.std(self.avg_wait_times[self.current_param]['iterations_output'])
+
         self.avg_processing_times[self.current_param]['average'] = np.average(self.avg_processing_times[self.current_param]['iterations_output'])
+        self.avg_processing_times[self.current_param]['sd'] = np.std(self.avg_processing_times[self.current_param]['iterations_output'])
         
         print 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
-        print 'Average Processing Time:', self.avg_processing_times[self.current_param]['average']
+        print 'SD Processing Time:', self.avg_processing_times[self.current_param]['sd']
+        print 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
+        print 'SD Processing Time:', self.avg_processing_times[self.current_param]['sd']
 
                 
     def run_simulation(self):
@@ -126,7 +135,26 @@ class Driver(object):
                 self.stats_aggregate()
     
     
-    
+    def display_graph_of_wait_times_with_changing_arrival_rate(self):
+        plt.figure()
+        
+        data_df = np.repeat(self.num_iterations, len(self.param1))
+
+        avg_wait_times = []
+        sd_wait_times = []
+        
+        for arrival_rate in self.param1:
+            current_param = (arrival_rate, self.param2)
+            avg_wait_times.append(self.avg_wait_times[current_param]['average'])
+            sd_wait_times.append(self.avg_wait_times[current_param]['sd'])
+        
+        data_m = np.array(avg_wait_times)
+        data_sd = np.array(sd_wait_times)   
+
+        plt.errorbar(self.param1, data_m, yerr=ss.t.ppf(0.95, data_df)*data_sd)
+        
+        plt.xlim((-1,4))
+        plt.show()    
     
     
     
