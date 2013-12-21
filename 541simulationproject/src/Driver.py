@@ -13,12 +13,13 @@ import matplotlib.pyplot as plt
 
 from Controller import Controller
 from Aggregator import Aggregator
+from Link import Link
 
 class Driver(object):
     def __init__ (self, num_iterations, num_updates_per_iteration):
         
         self.param1 = [1.0]#np.arange(1.0, 10.0, 1.0)
-        self.param2 = np.arange(0.1, 2.0, 0.2)
+        self.param2 = [1.0]#np.arange(0.1, 2.0, 0.2)
         self.current_param = ()
         
         self.num_iterations = num_iterations
@@ -38,21 +39,20 @@ class Driver(object):
         self.switch = Controller(self.env, self.current_param[0], self.current_param[1])
         
         #Build an aggregator
-        self.aggregator = Aggregator(self.env)
+        self.aggregator = Aggregator(self.env, self.current_param[1])
 
-        #Put a pipe between the two
-        pipe = simpy.Store(self.env)
+        #Put a link between the two
+        link = Link(self.env, 10)
+        self.switch.aggregator_link = link
+        self.aggregator.controller_link = link
         
-    
-    
-        
+            
     def setup_environment(self):
         
         random.seed()
         self.env = simpy.Environment()
         self.prepare_topology()
-        
-            
+                
             
     def run_iterations(self):
         self.avg_wait_times[self.current_param]  = {}
@@ -73,9 +73,9 @@ class Driver(object):
 
         
         self.avg_wait_times[self.current_param]['average'] = np.average(self.avg_wait_times[self.current_param]['iterations_output'])
-        print 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
-        
         self.avg_processing_times[self.current_param]['average'] = np.average(self.avg_processing_times[self.current_param]['iterations_output'])
+        
+        print 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
         print 'Average Processing Time:', self.avg_processing_times[self.current_param]['average']
                
                 
