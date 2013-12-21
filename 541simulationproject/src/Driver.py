@@ -50,9 +50,9 @@ class Driver(object):
             yield self.env.timeout(random.expovariate(self.current_param[0]))
                         
             #Put things on the local pipe
-            update = Update(self.env.now)
+            update = Update(self.env)
             
-            self.controller.processing_pipe.put(update)
+            update.hop(self.controller.processing_pipe)
             
             self.updates.append(update)
             
@@ -60,46 +60,70 @@ class Driver(object):
     def setup_environment(self):
         
         random.seed()
+        
+        self.updates = []
+        
         self.env = simpy.Environment()
         self.prepare_topology()
         
         update_generator = self.env.process(self.update_generator())
             
     def run_iterations(self):
+
+        for i in range(self.num_iterations):
+            self.setup_environment()
+            self.env.run(until=100)
+            self.stats_collect() 
+        
+    def stats_init(self):
+        
         self.avg_wait_times[self.current_param]  = {}
         self.avg_wait_times[self.current_param]['iterations_output'] = []
  
         self.avg_processing_times[self.current_param]  = {}
         self.avg_processing_times[self.current_param]['iterations_output'] = []
+    
+    def stats_collect(self):
+        total_updates_processed = 0
+        total_update_wait_time = 0
+        total_update_processing_time = 0
         
-        for i in range(self.num_iterations):
-            self.setup_environment()
-            self.env.run(until=100)
+        for u in self.updates:
+            if u.has_been_processed == True:
+                total_updates_processed += 1
+                total_update_wait_time += u.total_waiting_time()
+                total_update_processing_time += u.total_processing_time()
+                
+        avg_wait_time = total_update_wait_time / total_updates_processed
+        self.avg_wait_times[self.current_param]['iterations_output'].append(avg_wait_time)
 
-            avg_wait_time = self.controller.total_update_wait_time / self.controller.updates_processed
-            self.avg_wait_times[self.current_param]['iterations_output'].append(avg_wait_time)
+        avg_processing_time = total_update_processing_time / total_updates_processed
+        self.avg_processing_times[self.current_param]['iterations_output'].append(avg_processing_time)
 
-            avg_processing_time = self.controller.total_update_processing_time / self.controller.updates_processed
-            self.avg_processing_times[self.current_param]['iterations_output'].append(avg_processing_time)
 
-        
+    def stats_aggregate(self):
+ 
         self.avg_wait_times[self.current_param]['average'] = np.average(self.avg_wait_times[self.current_param]['iterations_output'])
         self.avg_processing_times[self.current_param]['average'] = np.average(self.avg_processing_times[self.current_param]['iterations_output'])
         
         print 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
         print 'Average Processing Time:', self.avg_processing_times[self.current_param]['average']
-               
+
                 
     def run_simulation(self):
+        
         
         #Loop over possible values of parameters
         for param1 in self.param1:
             for param2 in self.param2:
                 self.current_param = (param1, param2)
+                self.stats_init()
+                
                 print '--- Param1:', self.current_param[0], 'Param2:', self.current_param[1]
                 
                 self.run_iterations()
-    
+                
+                self.stats_aggregate()
     
     
     
