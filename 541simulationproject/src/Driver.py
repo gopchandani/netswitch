@@ -46,13 +46,31 @@ class Driver(object):
         self.switch.aggregator_link = link
         self.aggregator.controller_link = link
         
+    
+    def update_generator(self):
+        while True:
             
+            #Wait for a random amount of time before generating the next update
+            yield self.env.timeout(random.expovariate(self.current_param[0]))
+                        
+            #Put things on the local pipe
+            update = {}
+            update['hop_creation_time'] = self.env.now
+            update['wait_times'] = []
+            update['processing_times'] = []
+            
+            self.switch.processing_pipe.put(update)
+            
+            #Update stats
+            self.switch.updates_created = self.switch.updates_created + 1
+                        
     def setup_environment(self):
         
         random.seed()
         self.env = simpy.Environment()
         self.prepare_topology()
-                
+        
+        update_generator = self.env.process(self.update_generator())
             
     def run_iterations(self):
         self.avg_wait_times[self.current_param]  = {}
@@ -63,7 +81,7 @@ class Driver(object):
         
         for i in range(self.num_iterations):
             self.setup_environment()
-            self.env.run(until=1000)
+            self.env.run(until=100)
 
             avg_wait_time = self.switch.total_update_wait_time / self.switch.updates_processed
             self.avg_wait_times[self.current_param]['iterations_output'].append(avg_wait_time)

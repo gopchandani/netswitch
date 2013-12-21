@@ -20,7 +20,6 @@ class Controller(object):
         self.update_service_rate = update_service_rate 
 
         self.env = env
-        self.local_update_generator = env.process(self.local_update_generation())
         self.update_processor = env.process(self.update_processing())
 
         self.updates_created = 0
@@ -28,28 +27,10 @@ class Controller(object):
         self.total_update_wait_time = 0.0
         self.total_update_processing_time = 0.0
                 
-        self.processing_pipe = simpy.Store(self.env)
- 
+        self.processing_pipe = simpy.Store(self.env) 
         self.aggregator_link = None
-    
-    def local_update_generation(self):
-        while True:
-            
-            #Wait for a random amount of time before generating the next update
-            yield self.env.timeout(random.expovariate(self.update_arrival_rate))
-                        
-            #Put things on the local pipe
-            update = {}
-            update['hop_creation_time'] = self.env.now
-            update['wait_times'] = []
-            update['processing_times'] = []
-            
-            self.processing_pipe.put(update)
-            
-            #Update stats
-            self.updates_created = self.updates_created + 1
-            
-                
+
+         
     def update_processing(self):        
         while True:
             
