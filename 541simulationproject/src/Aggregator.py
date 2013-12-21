@@ -1,19 +1,28 @@
 '''
-Created on Dec 20, 2013
+Created on Dec 15, 2013
 
 @author: rakesh
 '''
 from Controller import Controller
 
-class Aggregator(Controller):
+class Aggregator():
     '''
     classdocs
     '''
 
 
-    def __init__(self, env, update_arrival_rate, update_service_rate):
+    def __init__(self, env):
         '''
         Constructor
         '''
+        self.env = env
+        
+        self.updates_to_process = 0
+        
+    #Some kind of loop, always trying to pass things
+    def process_updates(self):
         pass
-        super(Aggregator, self).__init__(env, update_arrival_rate, update_service_rate)
+    
+    
+    
+    

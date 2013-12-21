@@ -1,5 +1,5 @@
 '''
-Created on Dec 19, 2013
+Created on Dec 15, 2013
 
 @author: rakesh
 '''
@@ -12,7 +12,7 @@ class Controller(object):
     classdocs
     '''
     
-    def __init__(self, env, update_arrival_rate, update_service_rate):
+    def __init__(self, env, update_arrival_rate, update_service_rate):#, destination_pipes):
         '''
         Constructor
         '''
@@ -20,40 +20,62 @@ class Controller(object):
         self.update_service_rate = update_service_rate 
 
         self.env = env
-        self.proc = env.process(self.update_generation())
+        self.local_generation_processor = env.process(self.local_update_generation())
+        self.local_processing_processor = env.process(self.local_update_processing())
+
         
         self.local_processing_unit = simpy.Resource(self.env, capacity=1)
-        self.current_update_num = 0
-        self.update_processing_times = []
         
+        self.updates_created = 0
+        self.updates_processed = 0
+        
+        self.current_update_num = 0
+        self.total_update_processing_time = 0.0
+                
+        self.local_pipe = simpy.Store(self.env)
+ 
     
-    def update_generation(self):
+    def local_update_generation(self):
         while True:
             
             #Wait for a random amount of time before generating the next update
             yield self.env.timeout(random.expovariate(self.update_arrival_rate))
-
-            self.current_update_num = self.current_update_num + 1
                         
-            #Process the update
-            self.env.process(self.update_processing(self.current_update_num))
-                
-                
-    def update_processing(self, update_number):        
-                   
-        #Update generated
-        start = self.env.now
-        
-        with self.local_processing_unit.request() as req:
+            #Put things on the local pipe
+            update = {}
+            update['creation_time'] = self.env.now
+            self.local_pipe.put(update)
             
-            #Wait for local processing to be available
-            yield req
+            #Update stats
+            self.updates_created = self.updates_created + 1
+            self.current_update_num = self.current_update_num + 1
             
-            #Yield for amount of time it takes to process
-            yield self.env.timeout(random.expovariate(self.update_service_rate))
+                
+    def local_update_processing(self):        
         
-        end = self.env.now
-        
-        self.update_processing_times.append(end - start)
+        while True:
+            
+            update = yield self.local_pipe.get()
+            self.updates_processed = self.updates_processed + 1
+            self.current_update_num = self.current_update_num - 1    
+            
+            #Only process if the update was created before right now.
+            if self.env.now >= update['creation_time']:
+                
+                #Store the time the update waited for before it was processed
+                update['wait_time'] = self.env.now - update['creation_time']
+                
+                #Yield for amount of time it takes to process locally
+                yield self.env.timeout(random.expovariate(self.update_service_rate))
+                                
+                #Store the total
+                update['processing_time'] = self.env.now - update['creation_time']
+                
+                self.total_update_processing_time += update['processing_time']
 
-    
+#                print('here 1')
+#                print 'wait_time:', update['wait_time']
+#                print 'processing_time:', update['processing_time']
+                
+            else:
+                print('here 2')

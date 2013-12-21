@@ -32,8 +32,17 @@ class Driver(object):
         #TODO: Make this randomself.aggregator_hops_affected = random.uniform(0, 10)
         #TODO: Allow for multiple hops to be.
 
-        #agg = Aggregator(self.env, 0.1, 0.1)
+        #Build a switch        
         self.switch = Controller(self.env, self.current_param[0], self.current_param[1])
+        
+        #Build an aggregator
+        self.aggregator = Aggregator(self.env)
+
+        #Put a pipe between the two
+        pipe = simpy.Store(self.env)
+        
+    
+    
         
     def setup_environment(self):
         
@@ -49,10 +58,12 @@ class Driver(object):
         for i in range(self.num_iterations):
             self.setup_environment()
             self.env.run(until=1000)
-            self.avg_wait_times[self.current_param]['iterations_output'].append(np.average(self.switch.update_processing_times))
+
+            avg_processing_time = self.switch.total_update_processing_time / self.switch.updates_processed
+            self.avg_wait_times[self.current_param]['iterations_output'].append(avg_processing_time)
         
         self.avg_wait_times[self.current_param]['average'] = np.average(self.avg_wait_times[self.current_param]['iterations_output'])
-        print 'Param1:', self.current_param[0], 'Param2:', self.current_param[1], 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
+        print 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
                 
     def run_simulation(self):
         
@@ -60,7 +71,9 @@ class Driver(object):
         for param1 in self.param1:
             for param2 in self.param2:
                 self.current_param = (param1, param2)
-                self.run_iterations()                             
+                print 'Param1:', self.current_param[0], 'Param2:', self.current_param[1], 
+                
+                self.run_iterations()
     
     def prepare_goods_for_graph(self):                     
         
