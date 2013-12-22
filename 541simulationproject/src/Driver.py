@@ -24,7 +24,7 @@ class Driver(object):
         self.num_aggregator_levels = num_aggregator_levels
         self.num_controllers_per_aggregators = num_controllers_per_aggregators
         
-        self.param1 = np.arange(1, 20, 2.0)
+        self.param1 = np.arange(0.1, 5.0, 0.5)
         self.param2 = [1.0]#np.arange(0.1, 2.0, 0.2)
         self.current_param = ()
         
@@ -120,19 +120,22 @@ class Driver(object):
         total_update_wait_time = 0        
         total_update_processing_time = 0
         
+        
         for u in self.updates:
             if u.has_been_processed == True:
                 total_updates_processed += 1
                 total_update_wait_time += u.total_waiting_time()
 
                 total_update_processing_time += u.total_processing_time()
+         
+        
+        if total_updates_processed > 0: 
                 
-                
-        avg_wait_time = total_update_wait_time / total_updates_processed
-        self.avg_wait_times[self.current_param]['iterations_output'].append(avg_wait_time)
-
-        avg_processing_time = total_update_processing_time / total_updates_processed
-        self.avg_processing_times[self.current_param]['iterations_output'].append(avg_processing_time)
+            avg_wait_time = total_update_wait_time / total_updates_processed
+            self.avg_wait_times[self.current_param]['iterations_output'].append(avg_wait_time)
+    
+            avg_processing_time = total_update_processing_time / total_updates_processed
+            self.avg_processing_times[self.current_param]['iterations_output'].append(avg_processing_time)
 
     def compute_se(self, listnum, mean):
         square_sum = 0.0
@@ -149,17 +152,17 @@ class Driver(object):
         self.avg_wait_times[self.current_param]['average'] = np.average(self.avg_wait_times[self.current_param]['iterations_output'])
         self.avg_wait_times[self.current_param]['sd'] = np.std(self.avg_wait_times[self.current_param]['iterations_output'])
         self.avg_wait_times[self.current_param]['se'] = self.compute_se(self.avg_wait_times[self.current_param]['iterations_output'], self.avg_wait_times[self.current_param]['average'])
+        self.avg_wait_times[self.current_param]['df'] = len(self.avg_wait_times[self.current_param]['iterations_output'])
+
 
         self.avg_processing_times[self.current_param]['average'] = np.average(self.avg_processing_times[self.current_param]['iterations_output'])
         self.avg_processing_times[self.current_param]['sd'] = np.std(self.avg_processing_times[self.current_param]['iterations_output'])
         self.avg_processing_times[self.current_param]['se'] = self.compute_se(self.avg_processing_times[self.current_param]['iterations_output'], self.avg_processing_times[self.current_param]['average'])
-        
-        print 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
-        print 'SD Wait Time:', self.avg_wait_times[self.current_param]['sd']
-        print 'SE Wait Time:', self.avg_wait_times[self.current_param]['se']
-        
+        self.avg_processing_times[self.current_param]['df'] = len(self.avg_processing_times[self.current_param]['iterations_output'])
+
+
+        print 'Total Processed Updates:', self.avg_processing_times[self.current_param]['df']
         print 'Average Processing Time:', self.avg_processing_times[self.current_param]['average']
-        print 'SD Processing Time:', self.avg_processing_times[self.current_param]['sd']
         print 'SE Processing Time:', self.avg_processing_times[self.current_param]['se']
 
                 
@@ -182,22 +185,25 @@ class Driver(object):
     def display_graph_of_process_times_with_changing_arrival_rate(self):
         plt.figure()
         
-        data_df = np.repeat(self.num_iterations, len(self.param1))
 
         avg_processing_times = []
         se_processing_times = []
+        num_processing_times = []
         
         for arrival_rate in self.param1:
             current_param = (arrival_rate, self.param2[0])
             avg_processing_times.append(self.avg_processing_times[current_param]['average'])
             se_processing_times.append(self.avg_processing_times[current_param]['se'])
-        
+            num_processing_times.append(self.avg_processing_times[current_param]['df'])
+            
         data_m = np.array(avg_processing_times)
         data_se = np.array(se_processing_times)   
 
-        plt.errorbar(self.param1, data_m, yerr=ss.t.ppf(0.95, data_df)*data_se)
+        plt.errorbar(self.param1, data_m, yerr=ss.t.ppf(0.95, num_processing_times)*data_se)
         
-        plt.xlim((-1,4))
+        plt.xlim((min(self.param1) -1, max(self.param1) + 1))
+        plt.xlabel('Arrival Rate (Updates/ms)')
+        plt.ylabel('Avg. Update Processing Time (ms)')
         plt.show()    
     
     
