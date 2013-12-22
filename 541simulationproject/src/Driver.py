@@ -4,6 +4,7 @@ Created on Dec 10, 2013
 @author: rakesh
 '''
 
+import inspect
 import random
 import simpy
 
@@ -48,7 +49,7 @@ class Driver(object):
             #Is it the top-level of hierarchy?
             if l == 0:
                 #Just create a single aggregator.
-                aggregator = Controller(self.env, self.current_param[0], self.current_param[1])
+                aggregator = Controller(self.env, self.current_param[0], self.current_param[1], [])
                 higher_level_aggs.append(aggregator)
             
             #In the middle layers, aggregators aggregate
@@ -57,9 +58,9 @@ class Driver(object):
                 
                 #For each higher-layer aggregator, create num_controllers_per_aggregators aggregators
                 for hla in higher_level_aggs:
-                    for a in self.num_controllers_per_aggregators:
-                        aggregator = Controller(self.env, self.current_param[0], self.current_param[1])
-                        aggregator.aggregator_link = hla.processing_pipe
+                    for a in self.num_controllers_per_aggregators:        
+                        hla_list = [hla] + hla.hla_list
+                        aggregator = Controller(self.env, self.current_param[0], self.current_param[1], hla_list)
                         new_higher_level_aggs.append(aggregator)
                 
                 higher_level_aggs = new_higher_level_aggs
@@ -67,8 +68,9 @@ class Driver(object):
         # if it is bottom level, build controllers
         for hla in higher_level_aggs:   
             for c in range(self.num_controllers_per_aggregators):
-                controller = Controller(self.env, self.current_param[0], self.current_param[1])
-                controller.aggregator_link = hla.processing_pipe
+                hla_list = [hla] + hla.hla_list
+                
+                controller = Controller(self.env, self.current_param[0], self.current_param[1], hla_list)
                 
                 #Keep track of all controllers to feed them updates
                 self.controllers.append(controller)        
@@ -84,10 +86,11 @@ class Driver(object):
             controller = random.choice(self.controllers)
 
             #Create an update and hop it on
-            update = Update(self.env)            
-            update.hop(controller.processing_pipe)
+            update = Update(self.env, controller, controller.hla_list)            
+            
             self.updates.append(update)
-             
+                        
+            self.env.process(update.process_update())
                         
     def setup_environment(self):
         
