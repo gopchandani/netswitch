@@ -68,6 +68,11 @@ class Update(object):
                 self.hop_creation_times.append(hop_creation_time)
                 self.hop_wait_times.append(hop_wait_time)
                 self.hop_processing_times.append(hop_processing_time)
+                
+                print 'hop_creation_time', hop_creation_time
+                print 'hop_wait_time', hop_wait_time
+                print 'hop_processing_time', hop_processing_time 
+        
         
         #Do native controller processing
         with self.controller.processing_resource.request() as my_turn:

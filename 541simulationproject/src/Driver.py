@@ -25,7 +25,7 @@ class Driver(object):
         self.num_aggregator_levels = num_aggregator_levels
         self.num_controllers_per_aggregators = num_controllers_per_aggregators
         
-        self.param1 = np.arange(0.1, 5.0, 0.5)
+        self.param1 = np.arange(0.1, 2.0, 0.5)
         self.param2 = [1.0]#np.arange(0.1, 2.0, 0.2)
         self.current_param = ()
         
@@ -49,7 +49,7 @@ class Driver(object):
             #Is it the top-level of hierarchy?
             if l == 0:
                 #Just create a single aggregator.
-                aggregator = Controller(self.env, self.current_param[0], self.current_param[1], [])
+                aggregator = Controller(self.env, self.current_param[1], [])
                 higher_level_aggs.append(aggregator)
             
             #In the middle layers, aggregators aggregate
@@ -60,7 +60,7 @@ class Driver(object):
                 for hla in higher_level_aggs:
                     for a in self.num_controllers_per_aggregators:        
                         hla_list = [hla] + hla.hla_list
-                        aggregator = Controller(self.env, self.current_param[0], self.current_param[1], hla_list)
+                        aggregator = Controller(self.env,  self.current_param[1], hla_list)
                         new_higher_level_aggs.append(aggregator)
                 
                 higher_level_aggs = new_higher_level_aggs
@@ -70,7 +70,7 @@ class Driver(object):
             for c in range(self.num_controllers_per_aggregators):
                 hla_list = [hla] + hla.hla_list
                 
-                controller = Controller(self.env, self.current_param[0], self.current_param[1], hla_list)
+                controller = Controller(self.env, self.current_param[1], hla_list)
                 
                 #Keep track of all controllers to feed them updates
                 self.controllers.append(controller)        
