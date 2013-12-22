@@ -4,6 +4,7 @@ Created on Dec 18, 2013
 @author: rakesh
 '''
 import simpy
+import random
 
 class Update(object):
     '''
@@ -61,21 +62,19 @@ class Update(object):
                 hop_wait_time = self.env.now - hop_creation_time
                 
                 #This update has arrived on this aggregator now
-                yield self.env.timeout(hla.update_service_rate)        
-
+                yield self.env.timeout(random.expovariate(hla.update_service_rate))        
+                
+                
+                
                 hop_processing_time = self.env.now - hop_creation_time
 
                 self.hop_creation_times.append(hop_creation_time)
                 self.hop_wait_times.append(hop_wait_time)
                 self.hop_processing_times.append(hop_processing_time)
                 
-                print 'hop_creation_time', hop_creation_time
-                print 'hop_wait_time', hop_wait_time
-                print 'hop_processing_time', hop_processing_time 
-        
-        
+       
         #Do native controller processing
         with self.controller.processing_resource.request() as my_turn:
             result = yield my_turn            
-            yield self.env.timeout(self.controller.update_service_rate)
+            yield self.env.timeout(random.expovariate(self.controller.update_service_rate))
             self.has_been_processed = True
