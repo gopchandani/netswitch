@@ -24,7 +24,7 @@ class Driver(object):
         self.num_aggregator_levels = num_aggregator_levels
         self.num_controllers_per_aggregators = num_controllers_per_aggregators
         
-        self.param1 = np.arange(0.01, 2.0, 0.1)
+        self.param1 = np.arange(1, 20, 2.0)
         self.param2 = [1.0]#np.arange(0.1, 2.0, 0.2)
         self.current_param = ()
         
@@ -85,7 +85,7 @@ class Driver(object):
 
             #Create an update and hop it on
             update = Update(self.env)            
-            update.hop(self.controller.processing_pipe)
+            update.hop(controller.processing_pipe)
             self.updates.append(update)
              
                         
