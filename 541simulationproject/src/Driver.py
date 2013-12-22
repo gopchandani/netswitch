@@ -16,7 +16,13 @@ from Controller import Controller
 from Update import Update
 
 class Driver(object):
-    def __init__ (self, num_iterations, time_until):
+    def __init__ (self, num_iterations, time_until, num_aggregator_levels, num_controllers_per_aggregators):
+        
+        self.aggregators = []
+        self.controllers = []
+        
+        self.num_aggregator_levels = num_aggregator_levels
+        self.num_controllers_per_aggregators = num_controllers_per_aggregators
         
         self.param1 = np.arange(0.01, 2.0, 0.1)
         self.param2 = [1.0]#np.arange(0.1, 2.0, 0.2)
@@ -33,34 +39,55 @@ class Driver(object):
         self.updates = []
         
     def prepare_topology(self):
+        
+        higher_level_aggs = []
 
-        #Build controllers        
-        self.controller1 = Controller(self.env, self.current_param[0], self.current_param[1])
-        self.controller2 = Controller(self.env, self.current_param[0], self.current_param[1])
-        
-        #Build an aggregator 
-        self.aggregator = Controller(self.env, self.current_param[0], self.current_param[1])
-        
-        #Put a link between the two        
-        self.controller1.aggregator_link = self.aggregator.processing_pipe
-        self.controller2.aggregator_link = self.aggregator.processing_pipe
-        
-    
+        #Build the controller-aggregator tree from top-down
+        for l in range(self.num_aggregator_levels):
+                                    
+            #Is it the top-level of hierarchy?
+            if l == 0:
+                #Just create a single aggregator.
+                aggregator = Controller(self.env, self.current_param[0], self.current_param[1])
+                higher_level_aggs.append(aggregator)
+            
+            #In the middle layers, aggregators aggregate
+            else:
+                new_higher_level_aggs = []
+                
+                #For each higher-layer aggregator, create num_controllers_per_aggregators aggregators
+                for hla in higher_level_aggs:
+                    for a in self.num_controllers_per_aggregators:
+                        aggregator = Controller(self.env, self.current_param[0], self.current_param[1])
+                        aggregator.aggregator_link = hla.processing_pipe
+                        new_higher_level_aggs.append(aggregator)
+                
+                higher_level_aggs = new_higher_level_aggs
+            
+        # if it is bottom level, build controllers
+        for hla in higher_level_aggs:   
+            for c in range(self.num_controllers_per_aggregators):
+                controller = Controller(self.env, self.current_param[0], self.current_param[1])
+                controller.aggregator_link = hla.processing_pipe
+                
+                #Keep track of all controllers to feed them updates
+                self.controllers.append(controller)        
+
+
     def update_generator(self):
         while True:
             
             #Wait for a random amount of time before generating the next update
             yield self.env.timeout(random.expovariate(self.current_param[0]))
-                        
-            #Put things on the local pipe
+            
+            #Select a uniformly random controller from all the ones that have been generated            
+            controller = random.choice(self.controllers)
+
+            #Create an update and hop it on
             update = Update(self.env)            
-            update.hop(self.controller1.processing_pipe)
+            update.hop(self.controller.processing_pipe)
             self.updates.append(update)
-#
-#            update = Update(self.env)            
-#            update.hop(self.controller2.processing_pipe)
-#            self.updates.append(update)
-#                        
+             
                         
     def setup_environment(self):
         
@@ -152,23 +179,23 @@ class Driver(object):
                 self.stats_aggregate()
     
     
-    def display_graph_of_wait_times_with_changing_arrival_rate(self):
+    def display_graph_of_process_times_with_changing_arrival_rate(self):
         plt.figure()
         
         data_df = np.repeat(self.num_iterations, len(self.param1))
 
-        avg_wait_times = []
-        sd_wait_times = []
+        avg_processing_times = []
+        se_processing_times = []
         
         for arrival_rate in self.param1:
             current_param = (arrival_rate, self.param2[0])
-            avg_wait_times.append(self.avg_wait_times[current_param]['average'])
-            sd_wait_times.append(self.avg_wait_times[current_param]['sd'])
+            avg_processing_times.append(self.avg_processing_times[current_param]['average'])
+            se_processing_times.append(self.avg_processing_times[current_param]['se'])
         
-        data_m = np.array(avg_wait_times)
-        data_sd = np.array(sd_wait_times)   
+        data_m = np.array(avg_processing_times)
+        data_se = np.array(se_processing_times)   
 
-        plt.errorbar(self.param1, data_m, yerr=ss.t.ppf(0.95, data_df)*data_sd)
+        plt.errorbar(self.param1, data_m, yerr=ss.t.ppf(0.95, data_df)*data_se)
         
         plt.xlim((-1,4))
         plt.show()    
