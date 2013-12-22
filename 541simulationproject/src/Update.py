@@ -47,16 +47,9 @@ class Update(object):
     def total_processing_time(self):
         return sum(self.hop_processing_times)
 
-    def process_controller(self):
-        with self.controller.processing_request() as my_turn:
-            result = yield my_turn
-            
-            yield self.env.timeout(self.controller.update_service_rate)
-            
-       
-
     def process_update(self):
         
+        #Do HLA processing
         
         for hla in self.hla_list:
             
@@ -75,3 +68,9 @@ class Update(object):
                 self.hop_creation_times.append(hop_creation_time)
                 self.hop_wait_times.append(hop_wait_time)
                 self.hop_processing_times.append(hop_processing_time)
+        
+        #Do native controller processing
+        with self.controller.processing_resource.request() as my_turn:
+            result = yield my_turn            
+            yield self.env.timeout(self.controller.update_service_rate)
+            self.has_been_processed = True
