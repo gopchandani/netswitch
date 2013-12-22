@@ -7,6 +7,7 @@ Created on Dec 10, 2013
 import random
 import simpy
 
+import math
 import numpy as np
 import scipy.stats as ss
 import matplotlib.pyplot as plt
@@ -55,11 +56,11 @@ class Driver(object):
             update = Update(self.env)            
             update.hop(self.controller1.processing_pipe)
             self.updates.append(update)
-
-            update = Update(self.env)            
-            update.hop(self.controller2.processing_pipe)
-            self.updates.append(update)
-                        
+#
+#            update = Update(self.env)            
+#            update.hop(self.controller2.processing_pipe)
+#            self.updates.append(update)
+#                        
                         
     def setup_environment(self):
         
@@ -89,14 +90,16 @@ class Driver(object):
     
     def stats_collect(self):
         total_updates_processed = 0
-        total_update_wait_time = 0
+        total_update_wait_time = 0        
         total_update_processing_time = 0
         
         for u in self.updates:
             if u.has_been_processed == True:
                 total_updates_processed += 1
                 total_update_wait_time += u.total_waiting_time()
+
                 total_update_processing_time += u.total_processing_time()
+                
                 
         avg_wait_time = total_update_wait_time / total_updates_processed
         self.avg_wait_times[self.current_param]['iterations_output'].append(avg_wait_time)
@@ -104,19 +107,33 @@ class Driver(object):
         avg_processing_time = total_update_processing_time / total_updates_processed
         self.avg_processing_times[self.current_param]['iterations_output'].append(avg_processing_time)
 
+    def compute_se(self, listnum, mean):
+        square_sum = 0.0
+
+        for num in listnum:
+            square_sum = pow(num - mean, 2)
+        
+        se = math.sqrt((1.0/(len(listnum) - 1)) * square_sum)
+        return se
+        
 
     def stats_aggregate(self):
  
         self.avg_wait_times[self.current_param]['average'] = np.average(self.avg_wait_times[self.current_param]['iterations_output'])
         self.avg_wait_times[self.current_param]['sd'] = np.std(self.avg_wait_times[self.current_param]['iterations_output'])
+        self.avg_wait_times[self.current_param]['se'] = self.compute_se(self.avg_wait_times[self.current_param]['iterations_output'], self.avg_wait_times[self.current_param]['average'])
 
         self.avg_processing_times[self.current_param]['average'] = np.average(self.avg_processing_times[self.current_param]['iterations_output'])
         self.avg_processing_times[self.current_param]['sd'] = np.std(self.avg_processing_times[self.current_param]['iterations_output'])
+        self.avg_processing_times[self.current_param]['se'] = self.compute_se(self.avg_processing_times[self.current_param]['iterations_output'], self.avg_processing_times[self.current_param]['average'])
         
         print 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
+        print 'SD Wait Time:', self.avg_wait_times[self.current_param]['sd']
+        print 'SE Wait Time:', self.avg_wait_times[self.current_param]['se']
+        
+        print 'Average Processing Time:', self.avg_processing_times[self.current_param]['average']
         print 'SD Processing Time:', self.avg_processing_times[self.current_param]['sd']
-        print 'Average Wait Time:', self.avg_wait_times[self.current_param]['average']
-        print 'SD Processing Time:', self.avg_processing_times[self.current_param]['sd']
+        print 'SE Processing Time:', self.avg_processing_times[self.current_param]['se']
 
                 
     def run_simulation(self):
@@ -144,7 +161,7 @@ class Driver(object):
         sd_wait_times = []
         
         for arrival_rate in self.param1:
-            current_param = (arrival_rate, self.param2)
+            current_param = (arrival_rate, self.param2[0])
             avg_wait_times.append(self.avg_wait_times[current_param]['average'])
             sd_wait_times.append(self.avg_wait_times[current_param]['sd'])
         
@@ -158,39 +175,3 @@ class Driver(object):
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-#    
-#    def prepare_goods_for_graph(self):                     
-#        
-#        for param_tuple in self.avg_wait_times.keys():
-#            print param_tuple, self.avg_wait_times[param_tuple]['iterations_output']
-#
-#            self.avg_wait_times[param_tuple]['data_point'] = np.average(self.avg_wait_times[param_tuple]['iterations_output'])                        
-#            self.avg_wait_times[param_tuple]['data_sd'] = np.std(self.avg_wait_times[param_tuple]['iterations_output'])
-#            self.avg_wait_times[param_tuple]['yerr'] = ss.t.ppf(0.95, self.num_iterations - 1)*self.avg_wait_times[param_tuple]['data_sd']
-#    
-#    def display_graphs(self):
-#        plt.figure()
-#        data_m=np.array([1,2,3,4])
-#        data_df=np.array([5,6,7,8])
-#        
-#        data_sd=np.array([11,12,12,14])   
-#
-#        plt.errorbar([0,1,2,3], data_m, yerr=ss.t.ppf(0.95, data_df)*data_sd)
-#        
-#        plt.xlim((-1,4))
-#        plt.show()
-#                
-#    def process_output(self):
-#        
-#        self.prepare_goods_for_graph()
-#        self.display_graphs()
