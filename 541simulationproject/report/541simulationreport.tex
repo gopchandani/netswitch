@@ -560,24 +560,25 @@ When a rule update arrives at a controller, it has to wait for the update to pro
 
 
 \section{Model Description}
-We simulate the model described above using the Python simulation package SimPy~\cite{simpy}. The network topology that we consider is that of hubs-and-spokes. Each spoke contains numerous switches and a controller. The controller in the spoke connects to a hub, where we assume an aggregation node is present. The aggregation node has multiple spokes' connecting to it. Furthermore, the aggregation node's network can then also behaves as a spoke to a larger network and so on. Hence the hub-and-spoke essentially reduces to a tree with multiple aggregation levels and an outdegree. All nodes except the leaves of this aggregation are aggregating controllers. The leaves are just simple controllers where updates are generated. For the purposes of this simulation the tree's outdegree was set to 2 with total 10 levels.
+We simulate the model described above using the Python simulation package SimPy~\cite{simpy}. The network topology that we consider is that of hubs-and-spokes. Each spoke contains numerous switches and a controller. The controller in the spoke connects to a hub, where we assume an aggregation node is present. The aggregation node has multiple spokes' connecting to it. Furthermore, the aggregation node's network can then also behaves as a spoke to a larger network and so on. Hence the hub-and-spoke essentially reduces to a tree with multiple aggregation levels and an outdegree. All nodes except the leaves of this aggregation are aggregating controllers. The leaves are just simple controllers where updates are generated. 
 
 \subsection{Parameters}
 \begin{itemize}
  \item Exponentially Distributed Arrival Times: Each controller is responsible for producing updates. We use a single arrival generator to generate updates at a rate scaled by total number of controllers in the system and then splitting the arrivals using uniform distribution among all controllers.
  \item Exponentially Distributed Service Times: We assume the same service time distribution for all controllers and aggregators. 
  \item Probability of Hopping: The probability that when the update arrives on the controller/aggregator, it will be sent to the next. It is uniformly chosen and this makes the total number of aggregation layers that are involved in processing an update to be geometrically distributed.
+ \item 
  
  \end{itemize}
 
 \subsection{Metrics}
-The key metric of interest is the Total Processing Time for any update.
+The key metric of interest is the Total Processing Time for any update. This is computed by keeping track of update's arrival on every hop and summing over processing times on all hops.
 
 \subsection{Policies}
 Our simulated system only has one policy of waiting before the arrival results come to apply the update. 
 
 \section{Experimental Design}
-We perform an $2^k$ study.
+We perform an $2^k$ factorial design over all the parameters described above.
 
 \section{Conclusion}
 In the previous study using analytic methods, we were limited by the state-space explosion when it came to obtaining results for larger topologies. The results of this study are same for smaller networks that could be analyzed using analytic methods and hence trustworthy to be extrapolated. 

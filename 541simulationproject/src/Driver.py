@@ -28,6 +28,7 @@ class Driver(object):
         self.param1 = arrival_rate_range
         self.param2 = service_rate_range
         self.param3 = hop_probs
+        self.param4 = num_aggregator_levels
         
         self.current_param = ()
         
@@ -50,7 +51,7 @@ class Driver(object):
         higher_level_aggs = []
 
         #Build the controller-aggregator tree from top-down
-        for l in range(self.num_aggregator_levels):
+        for l in range(self.current_param[3]):
                                     
             #Is it the top-level of hierarchy?
             if l == 0:
@@ -173,6 +174,18 @@ class Driver(object):
         print 'Average Processing Time:', self.avg_processing_times[self.current_param]['average']
         print 'SE Processing Time:', self.avg_processing_times[self.current_param]['se']
 
+
+    def stats_analyze(self):
+
+        self.avg_processing_times[self.current_param]['average'] = np.average(self.avg_processing_times[self.current_param]['iterations_output'])
+        self.avg_processing_times[self.current_param]['sd'] = np.std(self.avg_processing_times[self.current_param]['iterations_output'])
+        self.avg_processing_times[self.current_param]['se'] = self.compute_se(self.avg_processing_times[self.current_param]['iterations_output'], self.avg_processing_times[self.current_param]['average'])
+        self.avg_processing_times[self.current_param]['df'] = len(self.avg_processing_times[self.current_param]['iterations_output'])
+
+        print 'Total Processed Updates:', self.avg_processing_times[self.current_param]['df']
+        print 'Average Processing Time:', self.avg_processing_times[self.current_param]['average']
+        print 'SE Processing Time:', self.avg_processing_times[self.current_param]['se']
+
                 
     def run_simulation(self):
                 
@@ -192,12 +205,16 @@ class Driver(object):
         for param1 in [self.param1[0], self.param1[len(self.param1) - 1]]:
             for param2 in [self.param2[0], self.param2[len(self.param2) - 1]]:
                 for param3 in [self.param3[0], self.param3[len(self.param3) - 1]]:
-                    self.current_param = (param1, param2, param3)
-                    print self.current_param
-                    self.stats_init()
-                    self.run_iterations()
-                    self.stats_aggregate()
+                    for param4 in [self.param4[0], self.param4[len(self.param4) - 1]]:
+                        self.current_param = (param1, param2, param3, param4)
+                        print self.current_param
+                        self.stats_init()
+                        self.run_iterations()
+                        self.stats_aggregate()
 
+        for param in self.avg_processing_times.keys():
+            print param
+            print self.avg_processing_times[param]
     
     def graph_process_times_with_changing_arrival_rate(self):
         plt.figure()
@@ -222,7 +239,7 @@ class Driver(object):
         plt.xlabel('Arrival Rate (Updates/ms)')
         plt.ylabel('Avg. Update Processing Time (ms)')
         #plt.show()    
-        plt.savefig('graph_process_times_with_changing_arrival_rate_num_aggs_' + str(self.num_aggregator_levels) + '_num_ctrls_per_aggs_' + str(self.num_controllers_per_aggregators))
+        plt.savefig('graph_process_times_with_changing_arrival_rate_num_aggs_' + str(self.current_param[3]) + '_num_ctrls_per_aggs_' + str(self.num_controllers_per_aggregators))
     
     
     
