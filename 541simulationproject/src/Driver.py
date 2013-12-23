@@ -25,8 +25,8 @@ class Driver(object):
         self.num_aggregator_levels = num_aggregator_levels
         self.num_controllers_per_aggregators = num_controllers_per_aggregators
         
-        self.param1 = np.arange(0.1, 2.0, 0.5)
-        self.param2 = [1.0]#np.arange(0.1, 2.0, 0.2)
+        self.param1 = np.arange(1.0, 10.0, 1.0)
+        self.param2 = [5.0]#np.arange(0.1, 2.0, 0.2)
         self.current_param = ()
         
         self.num_iterations = num_iterations
@@ -40,7 +40,10 @@ class Driver(object):
         self.updates = []
         
     def prepare_topology(self):
-        
+
+        self.aggregators = []
+        self.controllers = []
+                
         higher_level_aggs = []
 
         #Build the controller-aggregator tree from top-down
@@ -138,6 +141,8 @@ class Driver(object):
             self.avg_wait_times[self.current_param]['iterations_output'].append(avg_wait_time)
     
             avg_processing_time = total_update_processing_time / total_updates_processed
+            print 'total_update_processing_time:', total_update_processing_time
+            print 'total_updates_processed:', total_updates_processed
             self.avg_processing_times[self.current_param]['iterations_output'].append(avg_processing_time)
 
     def compute_se(self, listnum, mean):
@@ -151,7 +156,7 @@ class Driver(object):
         
 
     def stats_aggregate(self):
- 
+        
         self.avg_wait_times[self.current_param]['average'] = np.average(self.avg_wait_times[self.current_param]['iterations_output'])
         self.avg_wait_times[self.current_param]['sd'] = np.std(self.avg_wait_times[self.current_param]['iterations_output'])
         self.avg_wait_times[self.current_param]['se'] = self.compute_se(self.avg_wait_times[self.current_param]['iterations_output'], self.avg_wait_times[self.current_param]['average'])
@@ -163,6 +168,7 @@ class Driver(object):
         self.avg_processing_times[self.current_param]['se'] = self.compute_se(self.avg_processing_times[self.current_param]['iterations_output'], self.avg_processing_times[self.current_param]['average'])
         self.avg_processing_times[self.current_param]['df'] = len(self.avg_processing_times[self.current_param]['iterations_output'])
 
+        print self.avg_processing_times[self.current_param]['iterations_output']
 
         print 'Total Processed Updates:', self.avg_processing_times[self.current_param]['df']
         print 'Average Processing Time:', self.avg_processing_times[self.current_param]['average']
@@ -170,18 +176,16 @@ class Driver(object):
 
                 
     def run_simulation(self):
-        
-        
+                
         #Loop over possible values of parameters
         for param1 in self.param1:
             for param2 in self.param2:
                 self.current_param = (param1, param2)
                 self.stats_init()
                 
-                print '--- Param1:', self.current_param[0], 'Param2:', self.current_param[1]
+                print self.current_param
                 
                 self.run_iterations()
-                
                 self.stats_aggregate()
     
     
