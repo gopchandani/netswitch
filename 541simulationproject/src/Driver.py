@@ -17,7 +17,7 @@ from Controller import Controller
 from Update import Update
 
 class Driver(object):
-    def __init__ (self, num_iterations, time_until, num_aggregator_levels, num_controllers_per_aggregators, arrival_rate_range, service_rate_range):
+    def __init__ (self, num_iterations, time_until, num_aggregator_levels, num_controllers_per_aggregators, arrival_rate_range, service_rate_range, hop_probs):
         
         self.aggregators = []
         self.controllers = []
@@ -27,6 +27,8 @@ class Driver(object):
         
         self.param1 = arrival_rate_range
         self.param2 = service_rate_range
+        self.param3 = hop_probs
+        
         self.current_param = ()
         
         self.num_iterations = num_iterations
@@ -92,7 +94,7 @@ class Driver(object):
             controller = random.choice(self.controllers)
 
             #Create an update and hop it on
-            update = Update(self.env, controller, controller.hla_list, 0.5)            
+            update = Update(self.env, controller, controller.hla_list, self.current_param[2])            
             
             self.updates.append(update)
                         
@@ -186,6 +188,16 @@ class Driver(object):
                 self.run_iterations()
                 self.stats_aggregate()
     
+    def run_2_k_study(self):
+        for param1 in [self.param1[0], self.param1[len(self.param1) - 1]]:
+            for param2 in [self.param2[0], self.param2[len(self.param2) - 1]]:
+                for param3 in [self.param3[0], self.param3[len(self.param3) - 1]]:
+                    self.current_param = (param1, param2, param3)
+                    print self.current_param
+                    self.stats_init()
+                    self.run_iterations()
+                    self.stats_aggregate()
+
     
     def graph_process_times_with_changing_arrival_rate(self):
         plt.figure()
