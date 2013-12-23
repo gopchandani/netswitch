@@ -17,7 +17,7 @@ from Controller import Controller
 from Update import Update
 
 class Driver(object):
-    def __init__ (self, num_iterations, time_until, num_aggregator_levels, num_controllers_per_aggregators):
+    def __init__ (self, num_iterations, time_until, num_aggregator_levels, num_controllers_per_aggregators, arrival_rate_range, service_rate_range):
         
         self.aggregators = []
         self.controllers = []
@@ -25,8 +25,8 @@ class Driver(object):
         self.num_aggregator_levels = num_aggregator_levels
         self.num_controllers_per_aggregators = num_controllers_per_aggregators
         
-        self.param1 = np.arange(1.0, 10.0, 1.0)
-        self.param2 = [5.0]#np.arange(0.1, 2.0, 0.2)
+        self.param1 = arrival_rate_range
+        self.param2 = service_rate_range
         self.current_param = ()
         
         self.num_iterations = num_iterations
@@ -41,6 +41,7 @@ class Driver(object):
         
     def prepare_topology(self):
 
+        self.updates = []
         self.aggregators = []
         self.controllers = []
                 
@@ -61,7 +62,7 @@ class Driver(object):
                 
                 #For each higher-layer aggregator, create num_controllers_per_aggregators aggregators
                 for hla in higher_level_aggs:
-                    for a in self.num_controllers_per_aggregators:        
+                    for a in range(self.num_controllers_per_aggregators):        
                         hla_list = [hla] + hla.hla_list
                         aggregator = Controller(self.env,  self.current_param[1], hla_list)
                         new_higher_level_aggs.append(aggregator)
@@ -78,18 +79,20 @@ class Driver(object):
                 #Keep track of all controllers to feed them updates
                 self.controllers.append(controller)        
 
-
+        
     def update_generator(self):
         while True:
             
             #Wait for a random amount of time before generating the next update
-            yield self.env.timeout(random.expovariate(self.current_param[0]))
+            #Scale the rate s.t. each controller roughly gets to see lambda rate by means of splitting
+            
+            yield self.env.timeout(random.expovariate(len(self.controllers) * self.current_param[0]))
             
             #Select a uniformly random controller from all the ones that have been generated            
             controller = random.choice(self.controllers)
 
             #Create an update and hop it on
-            update = Update(self.env, controller, controller.hla_list)            
+            update = Update(self.env, controller, controller.hla_list, 0.5)            
             
             self.updates.append(update)
                         
@@ -98,9 +101,7 @@ class Driver(object):
     def setup_environment(self):
         
         random.seed()
-        
-        self.updates = []
-        
+                
         self.env = simpy.Environment()
         self.prepare_topology()
         
@@ -141,8 +142,6 @@ class Driver(object):
             self.avg_wait_times[self.current_param]['iterations_output'].append(avg_wait_time)
     
             avg_processing_time = total_update_processing_time / total_updates_processed
-            print 'total_update_processing_time:', total_update_processing_time
-            print 'total_updates_processed:', total_updates_processed
             self.avg_processing_times[self.current_param]['iterations_output'].append(avg_processing_time)
 
     def compute_se(self, listnum, mean):
@@ -168,8 +167,6 @@ class Driver(object):
         self.avg_processing_times[self.current_param]['se'] = self.compute_se(self.avg_processing_times[self.current_param]['iterations_output'], self.avg_processing_times[self.current_param]['average'])
         self.avg_processing_times[self.current_param]['df'] = len(self.avg_processing_times[self.current_param]['iterations_output'])
 
-        print self.avg_processing_times[self.current_param]['iterations_output']
-
         print 'Total Processed Updates:', self.avg_processing_times[self.current_param]['df']
         print 'Average Processing Time:', self.avg_processing_times[self.current_param]['average']
         print 'SE Processing Time:', self.avg_processing_times[self.current_param]['se']
@@ -181,15 +178,16 @@ class Driver(object):
         for param1 in self.param1:
             for param2 in self.param2:
                 self.current_param = (param1, param2)
-                self.stats_init()
                 
                 print self.current_param
                 
+                self.stats_init()
+                                
                 self.run_iterations()
                 self.stats_aggregate()
     
     
-    def display_graph_of_process_times_with_changing_arrival_rate(self):
+    def graph_process_times_with_changing_arrival_rate(self):
         plt.figure()
         
 
@@ -211,7 +209,8 @@ class Driver(object):
         plt.xlim((min(self.param1) -1, max(self.param1) + 1))
         plt.xlabel('Arrival Rate (Updates/ms)')
         plt.ylabel('Avg. Update Processing Time (ms)')
-        plt.show()    
+        #plt.show()    
+        plt.savefig('graph_process_times_with_changing_arrival_rate_num_aggs_' + str(self.num_aggregator_levels) + '_num_ctrls_per_aggs_' + str(self.num_controllers_per_aggregators))
     
     
     

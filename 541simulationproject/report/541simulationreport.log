@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.11.13)  22 DEC 2013 21:53
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.11.13)  22 DEC 2013 23:01
 entering extended mode
  %&-line parsing enabled.
 **541simulationreport.tex
@@ -175,11 +175,7 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
 LaTeX Info: Redefining \[ on input line 2666.
 LaTeX Info: Redefining \] on input line 2667.
 )
-(./541simulationreport.aux
-
-LaTeX Warning: Label `fig:alternative_network_view' multiply defined.
-
-)
+(./541simulationreport.aux)
 \openout1 = `541simulationreport.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 353.
@@ -194,7 +190,8 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 353.
 LaTeX Font Info:    ... okay on input line 353.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 353.
 LaTeX Font Info:    ... okay on input line 353.
- (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
+
+(/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count104
 \scratchdimen=\dimen128
@@ -218,53 +215,11 @@ x.map}
 File: graphics/alternative_network_view.pdf Graphic file (type pdf)
 
 <use graphics/alternative_network_view.pdf>
-<graphics/model_perspective.pdf, id=19, 289.08pt x 289.08pt>
-File: graphics/model_perspective.pdf Graphic file (type pdf)
+Underfull \hbox (badness 1424) in paragraph at lines 566--569
+[]\OT1/ptm/m/n/10 Exponentially Dis-tributed Ar-rival Times Ex-po-nen-tially
+ []
 
-<use graphics/model_perspective.pdf>
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 578.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 578.
 [2 <./graphics/alternative_network_view.pdf>]
-<graphics/incident_isss_positive_slope.pdf, id=34, 578.16pt x 433.62pt>
-File: graphics/incident_isss_positive_slope.pdf Graphic file (type pdf)
-
-<use graphics/incident_isss_positive_slope.pdf>
-Overfull \hbox (36.02942pt too wide) in paragraph at lines 620--621
- [][] 
- []
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<graphics/incident_isss_zero_slope.pdf, id=36, 578.16pt x 433.62pt>
-File: graphics/incident_isss_zero_slope.pdf Graphic file (type pdf)
-
-<use graphics/incident_isss_zero_slope.pdf>
-Overfull \hbox (36.02942pt too wide) in paragraph at lines 630--631
- [][] 
- []
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<graphics/incident_isss_negative_slope.pdf, id=38, 578.16pt x 433.62pt>
-File: graphics/incident_isss_negative_slope.pdf Graphic file (type pdf)
-
-<use graphics/incident_isss_negative_slope.pdf>
-Overfull \hbox (36.02942pt too wide) in paragraph at lines 639--640
- [][] 
- []
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[3 <./graphics/model_perspective.pdf> <./graphics/incident_isss_positive_slope.
-pdf> <./graphics/incident_isss_zero_slope.pdf>]
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -276,32 +231,25 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[4
+[3
 
- <./graphics/incident_isss_negative_slope.pdf>] (./541simulationreport.aux)
-
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+] (./541simulationreport.aux) ) 
 Here is how much of TeX's memory you used:
- 2218 strings out of 495061
- 32544 string characters out of 1182620
- 91830 words of memory out of 3000000
- 5415 multiletter control sequences out of 15000+50000
- 35250 words of font info for 64 fonts, out of 3000000 for 9000
+ 2193 strings out of 495061
+ 31634 string characters out of 1182620
+ 91770 words of memory out of 3000000
+ 5395 multiletter control sequences out of 15000+50000
+ 34143 words of font info for 63 fonts, out of 3000000 for 9000
  31 hyphenation exceptions out of 8191
- 27i,6n,21p,1063b,196s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
-ve/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/ty
-pe1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/public/a
-msfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/c
-msy10.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/shar
-e/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-texlive/fon
-ts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/u
-tmri8a.pfb>
-Output written on 541simulationreport.pdf (4 pages, 171841 bytes).
+ 27i,6n,21p,1063b,223s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/share/texmf-texlive/fonts/enc/dvips/base/8
+r.enc}</usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/te
+xmf-texlive/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-texlive/fonts/t
+ype1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri
+8a.pfb>
+Output written on 541simulationreport.pdf (3 pages, 88044 bytes).
 PDF statistics:
- 169 PDF objects out of 1000 (max. 8388607)
+ 45 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

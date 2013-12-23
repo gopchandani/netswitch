@@ -12,7 +12,7 @@ class Controller(object):
     classdocs
     '''
     
-    def __init__(self, env, update_service_rate, hla_list):#, destination_pipes):
+    def __init__(self, env, update_service_rate, hla_list):
         '''
         Constructor
         '''

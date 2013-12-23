@@ -354,7 +354,7 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Design Analysis of a Distributed Invariant Verification Scheme for Software Defined Networks}
+\title{Simulation of a Distributed Invariant Verification Scheme for Software Defined Networks}
 
 
 % author names and affiliations
@@ -405,7 +405,7 @@ Email: kumar19@illinois.edu}
 \begin{abstract}
 %\boldmath
 
-We use Stochastic Activity Networks to model a distributed system's performance. The purpose of distributed system is to verify that a large network's data-plane state always conforms to certain invariants. These invariants ensure the correct, secure operation of the system. Each update to the network state is verified before it is applied to the system. Hence this verification needs to be performed in \textit{near} real-time. This verification is performed on system state that spans across multiple controllers and aggregation nodes in the system. We first describe the abstract elements of the design and following that study the scalability properties of the proposed design.
+We perform a simulation study of a distributed system's performance. The purpose of distributed system is to verify that a large network's forwarding-plane state always conforms to certain invariants such as conformance to a security policy, or absence of loops etc. These invariants ensure the correct, secure operation of the system. Hence this verification needs to be performed in \textit{near} real-time. This verification is performed on system state that spans across multiple controllers and aggregation nodes in the system. We first describe the abstract elements of the design and following that study the scalability properties of the proposed design using a process-oriented simulation package SimPy~\cite{simpy}.
 
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
@@ -560,90 +560,113 @@ When a rule update arrives at a controller, it has to wait for the update to pro
 
 
 \section{Model Description}
-We model from the perspective of a single \textit{incident} controller interacting with the hierarchy of aggregators, i.e. the controller at which updates are arriving. Each update would require a random number of aggregation levels to be travelled depending on just what traffic that rule update affects. At a given time, only one rule update is processed by the incident controller, i.e. it waits until the responses by all the aggregators have been received, then decides what to do about the rule update and then moves on to the next one.
+We simulate the model described above using the Python simulation package SimPy~\cite{simpy}. The network topology that we consider is that of hubs-and-spokes. Each spoke contains numerous switches and a controller. The controller in the spoke connects to a hub, where we assume an aggregation node is present. The aggregation node has multiple spokes' connecting to it. Furthermore, the aggregation node's network can then also behaves as a spoke to a larger network and so on. Hence the hub-and-spoke essentially reduces to a tree with multiple aggregation levels and an outdegree. All nodes except the leaves of this aggregation are aggregating controllers. The leaves are just simple controllers where updates are generated. For the purposes of this simulation the tree's outdegree was set to 2.
+
+\subsection{Parameters}
+Exponentially Distributed Arrival Times
+Exponentially Distributed Service Times
+Number of Levels 
+
+\subsection{Metrics}
+\subsection{Policies}
+
+\section{Experimental Design}
+Describe the 2 raised to power k method being applied. How it is applied and so on.
+
+\section{Comparison in Policies}
+Are there any two policies that one can think of?
+
+\section{Conclusion}
+In the previous study using analytic methods.
 
 
- \begin{figure}[h]
- \centering
- \includegraphics[scale=0.8]{model_perspective}
- \caption{Perspective of the network that model takes.}
- \label{fig:alternative_network_view}
- \end{figure}
 
-
-
-\subsection{Model Assumptions}
-
-\begin {itemize}
- \item Assume exponential arrival time distribution for rule update arrivals with the rate given by $\lambda$.
- \item There are $K$ aggregation levels in the hierarchy of controllers, where $K$ is finite. 
- \item The distribution of how many aggregation levels a given rule update triggers given by $n$ is a decreasing function. Intuitively, this is to express that rule updates affect the network topology in their local \textit{neighborbood} more often than they affect things in \textit{farther} places. The model uses a linearly decreasing function for this. So, $P(n_i) = mU(i) + b$, where $U(i)$ is the pdf of uniform distribution, $m$ is negative and its magnitude controls how fast the effect of an update dimnishes and $b$ is the baseline intercept.
- \item Time spent on processing an update on any level is assumed to be constant and is given by $C$. Total time spent processing $n$ levels then is given by $nC$. Hence the service rate for a given update is given by $nC$. 
- \item Size of the queue for holding updates is fixed is referred to as $B$.
- 
+% 
+% \section{Model Description}
+% We model from the perspective of a single \textit{incident} controller interacting with the hierarchy of aggregators, i.e. the controller at which updates are arriving. Each update would require a random number of aggregation levels to be travelled depending on just what traffic that rule update affects. At a given time, only one rule update is processed by the incident controller, i.e. it waits until the responses by all the aggregators have been received, then decides what to do about the rule update and then moves on to the next one.
+% 
+% 
+%  \begin{figure}[h]
+%  \centering
+%  \includegraphics[scale=0.8]{model_perspective}
+%  \caption{Perspective of the network that model takes.}
+%  \label{fig:alternative_network_view}
+%  \end{figure}
+% 
+% 
+% 
+% \subsection{Model Assumptions}
+% 
+% \begin {itemize}
+%  \item Assume exponential arrival time distribution for rule update arrivals with the rate given by $\lambda$.
+%  \item There are $K$ aggregation levels in the hierarchy of controllers, where $K$ is finite. 
+%  \item The distribution of how many aggregation levels a given rule update triggers given by $n$ is a decreasing function. Intuitively, this is to express that rule updates affect the network topology in their local \textit{neighborbood} more often than they affect things in \textit{farther} places. The model uses a linearly decreasing function for this. So, $P(n_i) = mU(i) + b$, where $U(i)$ is the pdf of uniform distribution, $m$ is negative and its magnitude controls how fast the effect of an update dimnishes and $b$ is the baseline intercept.
+%  \item Time spent on processing an update on any level is assumed to be constant and is given by $C$. Total time spent processing $n$ levels then is given by $nC$. Hence the service rate for a given update is given by $nC$. 
+%  \item Size of the queue for holding updates is fixed is referred to as $B$.
 %  
-%  \item Di is the degree parameter. It indicates for a given level i, how many sub-controllers can be directly calling it an aggregator. Canonically, Di is 0 for i = 1, but it can be random or a deterministic function of i.
+% %  
+% %  \item Di is the degree parameter. It indicates for a given level i, how many sub-controllers can be directly calling it an aggregator. Canonically, Di is 0 for i = 1, but it can be random or a deterministic function of i.
+% %  
+% %  \item There are arrivals on each level of controller. Arrival rates are given by lambda i. Lambda is a function of (Di). 
+% %  
+% %  \item There are service rates for each level of aggregator. Service rates are given by $\mu_i$, for each aggregation level $i$. $\mu_i$ should be a function of $d_i$ to allow for scalable processing as one gets closer to the network core. We explore how linear of a function is this required to be for a stable queue.
+% 
+% \end {itemize}
+% 
+% \subsection{Model Rewards}
+% 
+% 
+% \begin{itemize}
 %  
-%  \item There are arrivals on each level of controller. Arrival rates are given by lambda i. Lambda is a function of (Di). 
+%  \item \textbf{Expected wait time until service:} The average amount of time it takes for the results of verification of the rule update to propagate back towards the incident controller is given by $W$. With $L$ being the average number of rule updates in the queue waiting to be processed and $\lambda$ being the arrival rate,  little's law ~\cite{kleinrock} suggests:
 %  
-%  \item There are service rates for each level of aggregator. Service rates are given by $\mu_i$, for each aggregation level $i$. $\mu_i$ should be a function of $d_i$ to allow for scalable processing as one gets closer to the network core. We explore how linear of a function is this required to be for a stable queue.
-
-\end {itemize}
-
-\subsection{Model Rewards}
-
-
-\begin{itemize}
- 
- \item \textbf{Expected wait time until service:} The average amount of time it takes for the results of verification of the rule update to propagate back towards the incident controller is given by $W$. With $L$ being the average number of rule updates in the queue waiting to be processed and $\lambda$ being the arrival rate,  little's law ~\cite{kleinrock} suggests:
- 
-\begin{equation*}
- W = \frac{L}{\lambda}
-\end{equation*}
-
-Assuming a fixed $\lambda$ on the incident controller and by associating a steady rate reward on the size of queue, one can compute $W$ for a given set of model parameters.
- 
-
- 
- 
-\end{itemize}
-
-
-
-\section{Results and Conclusion}
-
-We implemented the model described above using Stochastic Activity Networks in Mobius. We solved the model for various values of $m$, $\lambda$ and $C$. The results for the same are presented in figures \ref{fig:incident_isss_positive_slope},  \ref{fig:incident_isss_zero_slope} and \ref{fig:incident_isss_negative_slope}. As evident, as the slope decreases, the system scales better, which is easily explained by the fact that decrease in slope indicates fewer queries generated for processing to distant controllers. It is not clear what slopes in the real networks look like, however several recent studies have made arguments for it to be negative. 
- 
-
- \begin{figure}[h]
- \centering
- \includegraphics[scale=0.50]{incident_isss_positive_slope}
- \caption{Design scaling when m = 1}
- \label{fig:incident_isss_positive_slope}
- \end{figure}
-
- 
- Furthermore, all the curves exhibit a knee, which is characteristic of a bounded-queue system. This indicates presence of a tipping point, which once reached, can potentially send the system in to chaos. However as the slope decreases, one observes the knee being displaced towards right, which indicates that the tipping point becomes less likely to be hit.
- 
- \begin{figure}[h]
- \centering
- \includegraphics[scale=0.50]{incident_isss_zero_slope}
- \caption{Design scaling when m = 0}
- \label{fig:incident_isss_zero_slope}
- \end{figure}
-
- And finally, the magnitude of average time required to process an update decreases with slope and increases with per-level costs. Since we assumed fixed costs per level, this view is simplistic. This suggests that as one gets closer to the core of network, there is potential for improved performance if the cost is reduced per aggregation level.
-
- \begin{figure}[h]
- \centering
- \includegraphics[scale=0.50]{incident_isss_negative_slope}
- \caption{Design scaling when m = -1}
- \label{fig:incident_isss_negative_slope}
- \end{figure}
-
-
-\section{Future Work}
-The model studied here is very simple but it captures the dynamics of the system. It also provides some design insights into potentially allowing parallel updates and rolling back if they fail to pass. Performance of studying such system would be one future direction this model can be extended towards. One can also study and quantify the cost of consistency in the face of higher workloads and derive trade-offs for real systems by modelling more complex dyanmics of the design.
+% \begin{equation*}
+%  W = \frac{L}{\lambda}
+% \end{equation*}
+% 
+% Assuming a fixed $\lambda$ on the incident controller and by associating a steady rate reward on the size of queue, one can compute $W$ for a given set of model parameters.
+%  
+% 
+%  
+%  
+% \end{itemize}
+% 
+% 
+% 
+% \section{Results and Conclusion}
+% 
+% We implemented the model described above using Stochastic Activity Networks in Mobius. We solved the model for various values of $m$, $\lambda$ and $C$. The results for the same are presented in figures \ref{fig:incident_isss_positive_slope},  \ref{fig:incident_isss_zero_slope} and \ref{fig:incident_isss_negative_slope}. As evident, as the slope decreases, the system scales better, which is easily explained by the fact that decrease in slope indicates fewer queries generated for processing to distant controllers. It is not clear what slopes in the real networks look like, however several recent studies have made arguments for it to be negative. 
+%  
+% 
+%  \begin{figure}[h]
+%  \centering
+%  \includegraphics[scale=0.50]{incident_isss_positive_slope}
+%  \caption{Design scaling when m = 1}
+%  \label{fig:incident_isss_positive_slope}
+%  \end{figure}
+% 
+%  
+%  Furthermore, all the curves exhibit a knee, which is characteristic of a bounded-queue system. This indicates presence of a tipping point, which once reached, can potentially send the system in to chaos. However as the slope decreases, one observes the knee being displaced towards right, which indicates that the tipping point becomes less likely to be hit.
+%  
+%  \begin{figure}[h]
+%  \centering
+%  \includegraphics[scale=0.50]{incident_isss_zero_slope}
+%  \caption{Design scaling when m = 0}
+%  \label{fig:incident_isss_zero_slope}
+%  \end{figure}
+% 
+%  And finally, the magnitude of average time required to process an update decreases with slope and increases with per-level costs. Since we assumed fixed costs per level, this view is simplistic. This suggests that as one gets closer to the core of network, there is potential for improved performance if the cost is reduced per aggregation level.
+% 
+%  \begin{figure}[h]
+%  \centering
+%  \includegraphics[scale=0.50]{incident_isss_negative_slope}
+%  \caption{Design scaling when m = -1}
+%  \label{fig:incident_isss_negative_slope}
+%  \end{figure}
+% 
+% 
+% \section{Future Work}
+% The model studied here is very simple but it captures the dynamics of the system. It also provides some design insights into potentially allowing parallel updates and rolling back if they fail to pass. Performance of studying such system would be one future direction this model can be extended towards. One can also study and quantify the cost of consistency in the face of higher workloads and derive trade-offs for real systems by modelling more complex dyanmics of the design.
 
 % conference papers do not normally have an appendix
 % 
@@ -722,7 +745,12 @@ Bruce~Daniel McLeod.
 Kleinrock, Leonard
 \newblock Queueing systems. volume 1: Theory
 \newblock 1975, Wiley-Interscience
- 
+
+\bibitem{simpy}
+Muller, Klaus
+\newblock Advanced systems simulation capabilities in SimPy
+\newblock Europython, 2004.
+
   
 \end{thebibliography}
 
