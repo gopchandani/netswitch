@@ -58,7 +58,7 @@ class Update(object):
         for hla in self.hla_list:
 
             hop_to_next = random.uniform(0,1)
-            if hop_to_next < self.hop_prob:
+            if hop_to_next > self.hop_prob:
                 break
             
             hop_creation_time = self.env.now

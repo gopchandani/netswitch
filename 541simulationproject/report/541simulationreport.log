@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.11.13)  23 DEC 2013 06:56
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.11.13)  23 DEC 2013 13:52
 entering extended mode
  %&-line parsing enabled.
 **541simulationreport.tex
@@ -219,7 +219,29 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 567.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 567.
- [2 <./graphics/alternative_network_view.pdf>]
+ [2 <./graphics/alternative_network_view.pdf>] <vary_arrival_rate.pdf, id=29, 5
+78.16pt x 433.62pt>
+File: vary_arrival_rate.pdf Graphic file (type pdf)
+
+<use vary_arrival_rate.pdf>
+Overfull \hbox (36.02942pt too wide) in paragraph at lines 606--607
+ [][] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<vary_prob_hop.pdf, id=31, 578.16pt x 433.62pt>
+File: vary_prob_hop.pdf Graphic file (type pdf)
+ <use vary_prob_hop.pdf>
+Overfull \hbox (36.02942pt too wide) in paragraph at lines 613--614
+ [][] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[3 <./vary_arrival_rate.pdf> <./vary_prob_hop.pdf>]
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -231,17 +253,17 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[3
+[4
 
 ] (./541simulationreport.aux) ) 
 Here is how much of TeX's memory you used:
- 2195 strings out of 495061
- 31662 string characters out of 1182620
- 91770 words of memory out of 3000000
- 5397 multiletter control sequences out of 15000+50000
- 34143 words of font info for 63 fonts, out of 3000000 for 9000
+ 2208 strings out of 495061
+ 31938 string characters out of 1182620
+ 91786 words of memory out of 3000000
+ 5407 multiletter control sequences out of 15000+50000
+ 35221 words of font info for 64 fonts, out of 3000000 for 9000
  31 hyphenation exceptions out of 8191
- 27i,6n,21p,1063b,196s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 27i,7n,21p,1063b,225s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8
 r.enc}</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/
 share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-
@@ -249,9 +271,9 @@ texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fon
 ts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/u
 tmbi8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/sha
 re/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on 541simulationreport.pdf (3 pages, 112037 bytes).
+Output written on 541simulationreport.pdf (4 pages, 141236 bytes).
 PDF statistics:
- 57 PDF objects out of 1000 (max. 8388607)
+ 141 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

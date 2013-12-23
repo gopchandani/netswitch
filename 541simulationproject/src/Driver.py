@@ -192,30 +192,128 @@ class Driver(object):
         #Loop over possible values of parameters
         for param1 in self.param1:
             for param2 in self.param2:
-                self.current_param = (param1, param2)
-                
-                print self.current_param
-                
-                self.stats_init()
-                                
-                self.run_iterations()
-                self.stats_aggregate()
-    
-    def run_2_k_study(self):
-        for param1 in [self.param1[0], self.param1[len(self.param1) - 1]]:
-            for param2 in [self.param2[0], self.param2[len(self.param2) - 1]]:
-                for param3 in [self.param3[0], self.param3[len(self.param3) - 1]]:
-                    for param4 in [self.param4[0], self.param4[len(self.param4) - 1]]:
+                for param3 in self.param3:
+                    for param4 in self.param4:
                         self.current_param = (param1, param2, param3, param4)
                         print self.current_param
                         self.stats_init()
                         self.run_iterations()
                         self.stats_aggregate()
-
-        for param in self.avg_processing_times.keys():
-            print param
-            print self.avg_processing_times[param]
+                        
     
+    def run_2_k_study(self):
+#        for param1 in [self.param1[0], self.param1[len(self.param1) - 1]]:
+#            for param2 in [self.param2[0], self.param2[len(self.param2) - 1]]:
+#                for param3 in [self.param3[0], self.param3[len(self.param3) - 1]]:
+#                    for param4 in [self.param4[0], self.param4[len(self.param4) - 1]]:
+#                        self.current_param = (param1, param2, param3, param4)
+#                        print self.current_param
+#                        self.stats_init()
+#                        self.run_iterations()
+#                        self.stats_aggregate()
+
+        
+        #Study effect of arrival rate
+        hi_res = []
+        hi_avg = 0
+        low_res = []
+        low_avg = 0
+        
+        low_param_val = self.param1[0]
+        hi_param_val = self.param1[len(self.param1) - 1]
+                
+        for params in self.avg_processing_times.keys():
+            #Pick the low and high side values
+            if params[0] == low_param_val:
+                low_res.append(self.avg_processing_times[params]['average'])
+                
+            if params[0] == hi_param_val:
+                hi_res.append(self.avg_processing_times[params]['average'])
+
+        low_avg = np.average(low_res)
+        hi_avg = np.average(hi_res)
+        
+        eff = abs(hi_avg - low_avg)
+        print 'Arrival Rate &', low_param_val, '&', hi_param_val, '&', eff
+
+
+        
+        #Study effect of service rate
+        hi_res = []
+        hi_avg = 0
+        low_res = []
+        low_avg = 0
+        
+        low_param_val = self.param2[0]
+        hi_param_val = self.param2[len(self.param2) - 1]
+                
+        for params in self.avg_processing_times.keys():
+            #Pick the low and high side values
+            if params[1] == low_param_val:
+                low_res.append(self.avg_processing_times[params]['average'])
+                
+            if params[1] == hi_param_val:
+                hi_res.append(self.avg_processing_times[params]['average'])
+
+        low_avg = np.average(low_res)
+        hi_avg = np.average(hi_res)
+        
+        eff = abs(hi_avg - low_avg)
+        print 'Service Rate &', low_param_val, '&', hi_param_val, '&', eff
+        
+
+        
+        #Study effect of hop prob
+        hi_res = []
+        hi_avg = 0
+        low_res = []
+        low_avg = 0
+        
+        low_param_val = self.param3[0]
+        hi_param_val = self.param3[len(self.param3) - 1]
+                
+        for params in self.avg_processing_times.keys():
+            #Pick the low and high side values
+            if params[2] == low_param_val:
+                low_res.append(self.avg_processing_times[params]['average'])
+                
+            if params[2] == hi_param_val:
+                hi_res.append(self.avg_processing_times[params]['average'])
+
+        low_avg = np.average(low_res)
+        hi_avg = np.average(hi_res)
+        
+        eff = abs(hi_avg - low_avg)
+        print 'Probability of Hopping  &', low_param_val, '&', hi_param_val, '&', eff
+        
+
+        
+        #Study effect of num levels
+        hi_res = []
+        hi_avg = 0
+        low_res = []
+        low_avg = 0
+        
+        low_param_val = self.param4[0]
+        hi_param_val = self.param4[len(self.param4) - 1]
+                
+        for params in self.avg_processing_times.keys():
+            #Pick the low and high side values
+            if params[3] == low_param_val:
+                low_res.append(self.avg_processing_times[params]['average'])
+                
+            if params[3] == hi_param_val:
+                hi_res.append(self.avg_processing_times[params]['average'])
+
+        low_avg = np.average(low_res)
+        hi_avg = np.average(hi_res)
+        
+        eff = abs(hi_avg - low_avg)
+        print 'Number of Aggregation Levels  &', low_param_val, '&', hi_param_val, '&', eff
+        
+                
+        
+        
     def graph_process_times_with_changing_arrival_rate(self):
         plt.figure()
         
@@ -224,8 +322,9 @@ class Driver(object):
         se_processing_times = []
         num_processing_times = []
         
+        
         for arrival_rate in self.param1:
-            current_param = (arrival_rate, self.param2[0])
+            current_param = (arrival_rate, self.param2[0], self.param3[1], self.param4[0])
             avg_processing_times.append(self.avg_processing_times[current_param]['average'])
             se_processing_times.append(self.avg_processing_times[current_param]['se'])
             num_processing_times.append(self.avg_processing_times[current_param]['df'])
@@ -239,7 +338,34 @@ class Driver(object):
         plt.xlabel('Arrival Rate (Updates/ms)')
         plt.ylabel('Avg. Update Processing Time (ms)')
         #plt.show()    
-        plt.savefig('graph_process_times_with_changing_arrival_rate_num_aggs_' + str(self.current_param[3]) + '_num_ctrls_per_aggs_' + str(self.num_controllers_per_aggregators))
+        plt.savefig('vary_arrival_rate.pdf')
+    
+        
+    def graph_process_times_with_changing_hopping_probability(self):
+        plt.figure()
+        
+
+        avg_processing_times = []
+        se_processing_times = []
+        num_processing_times = []
+        
+        
+        for hopping_prob in self.param3:
+            current_param = (self.param1[0], self.param2[0], hopping_prob, self.param4[0])
+            avg_processing_times.append(self.avg_processing_times[current_param]['average'])
+            se_processing_times.append(self.avg_processing_times[current_param]['se'])
+            num_processing_times.append(self.avg_processing_times[current_param]['df'])
+            
+        data_m = np.array(avg_processing_times)
+        data_se = np.array(se_processing_times)   
+
+        plt.errorbar(self.param3, data_m, yerr=ss.t.ppf(0.95, num_processing_times)*data_se)
+        
+        plt.xlim((min(self.param3), max(self.param3)))
+        plt.xlabel('Hopping Prob')
+        plt.ylabel('Avg. Update Processing Time (ms)')
+        #plt.show()    
+        plt.savefig('vary_prob_hop.pdf')
     
     
-    
+

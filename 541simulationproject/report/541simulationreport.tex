@@ -560,28 +560,78 @@ When a rule update arrives at a controller, it has to wait for the update to pro
 
 
 \section{Model Description}
-We simulate the model described above using the Python simulation package SimPy~\cite{simpy}. The network topology that we consider is that of hubs-and-spokes. Each spoke contains numerous switches and a controller. The controller in the spoke connects to a hub, where we assume an aggregation node is present. The aggregation node has multiple spokes' connecting to it. Furthermore, the aggregation node's network can then also behaves as a spoke to a larger network and so on. Hence the hub-and-spoke essentially reduces to a tree with multiple aggregation levels and an outdegree. All nodes except the leaves of this aggregation are aggregating controllers. The leaves are just simple controllers where updates are generated. 
+We simulate the model described above using the Python simulation package SimPy~\cite{simpy}. In a given iteration we simulate arrival and servicing of updates for 100 time units. We expect the absence of initialization bias because there is no setup of the state that happens before updates start arriving. The network topology that we consider is that of hubs-and-spokes. Each spoke contains numerous switches and a controller. The controller in the spoke connects to a hub, where we assume an aggregation node is present. The aggregation node has multiple spokes' connecting to it. Furthermore, the aggregation node's network can then also behaves as a spoke to a larger network and so on. Hence the hub-and-spoke essentially reduces to a tree with multiple aggregation levels and an outdegree. All nodes except the leaves of this aggregation are aggregating controllers. The leaves are just simple controllers where updates are generated. 
 
 \subsection{Parameters}
 \begin{itemize}
  \item Exponentially Distributed Arrival Times: Each controller is responsible for producing updates. We use a single arrival generator to generate updates at a rate scaled by total number of controllers in the system and then splitting the arrivals using uniform distribution among all controllers.
  \item Exponentially Distributed Service Times: We assume the same service time distribution for all controllers and aggregators. 
  \item Probability of Hopping: The probability that when the update arrives on the controller/aggregator, it will be sent to the next. It is uniformly chosen and this makes the total number of aggregation layers that are involved in processing an update to be geometrically distributed.
- \item 
+ \item Number of Aggregation Levels: This essentially represents the size of topology being simulated with the added effect of higher layer processing when the network size is large and hence has implications for the processing time.
  
  \end{itemize}
 
 \subsection{Metrics}
-The key metric of interest is the Total Processing Time for any update. This is computed by keeping track of update's arrival on every hop and summing over processing times on all hops.
+The key metric of interest is the Average Total Processing Time for any update on all aggregation levels. This is computed by keeping track of update's arrival on every hop and summing over processing times on all hops.
 
 \subsection{Policies}
 Our simulated system only has one policy of waiting before the arrival results come to apply the update. 
 
 \section{Experimental Design}
-We perform an $2^k$ factorial design over all the parameters described above.
+We perform an $2^k$ factorial design over all the parameters described above. We ran 50 iterations to generate the average for the processing time. Following table summarized the metric output for various choices of parameters:
 
-\section{Conclusion}
-In the previous study using analytic methods, we were limited by the state-space explosion when it came to obtaining results for larger topologies. The results of this study are same for smaller networks that could be analyzed using analytic methods and hence trustworthy to be extrapolated. 
+\begin{table}[h]
+%\caption{An Example of a Table}
+%\label{table_example}
+
+\begin{tabular}{ l c c c}
+  Parameter & Low Value & High Value & Difference \\
+  Arrival Rate & 1.0 & 4.5 & 15.58 \\
+  Service Rate & 1.0 & 4.5 & 17.13 \\
+  Probability of Hopping  & 0.0 & 1.0 & 24.59 \\
+  Number of Aggregation Levels  & 1 & 5 & 11.98 \\
+  \end{tabular}
+  
+\end{table}
+
+As evident from this table, the aggregation levels are least important parameter and it can be reasoned that because additional aggregation levels only add service times using the similar distribution, it does not have a lot of effect and hence for the purposes of results  simulation we fix it to 5.  We also fix the service rate to 1.0 as this may not be a parameter with a lot of operational control in real deployments. So we study the Average Total Processing Time by varying arrival rate and probability of hopping.
+
+
+\section{Results Conclusion}
+The outputs for two experiments previous described were generated each with 50 iterations which seemed to provide reasonable confidence interval. 
+
+
+ \begin{figure}[h]
+ \centering
+ \includegraphics[scale=0.50]{vary_arrival_rate}
+ \caption{Number of Aggregation Levels = 5, Service Rate = 1.0, Probability of Hopping = 0.1 }
+ \label{fig:vary_arrival_rate}
+ \end{figure}
+
+ \begin{figure}[h]
+ \centering
+ \includegraphics[scale=0.50]{vary_prob_hop}
+ \caption{Number of Aggregation Levels = 5, Service Rate = 1.0, Arrival Rate = 1.0}
+ \label{fig:vary_prob_hop}
+ \end{figure}
+
+
+
+In a previous study of this design using Stochastic Activity Networks, we were limited by the state-space explosion when it came to obtaining results for variate configurations for the parameters. The results of this study are same for smaller networks that could be analyzed using analytic methods and hence trustworthy to be extrapolated. 
+
+The overarching conclusion for the design itself is not positive. This result is very much expected given that the system model essentially is a network of queues. However, a better policy might look at contents of the update and discriminate between prioritizing those. 
+
+We also used the same service rates for all aggregators in this model which may not be true in practice. In real networks, the resources are scaled up in the hubs as compared to spokes, but that only shifts the inevitable knee of the processing time curve. 
+
+
+%  \begin{figure}[h]
+%  \centering
+%  \includegraphics[scale=0.8]{model_perspective}
+%  \caption{Perspective of the network that model takes.}
+%  \label{fig:alternative_network_view}
+%  \end{figure}
+
+The model studied here is very simple but it captures the dynamics of the system. It also provides some design insights into potentially allowing parallel updates and rolling back if they fail to pass. Performance of studying such system would be one future direction this model can be extended towards.
 
 
 
