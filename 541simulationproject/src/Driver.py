@@ -4,7 +4,7 @@ Created on Dec 10, 2013
 @author: rakesh
 '''
 
-import inspect
+from memory_profiler import profile
 import random
 import simpy
 
@@ -40,7 +40,6 @@ class Driver(object):
         self.avg_processing_times = {}        
         self.avg_wait_times = {}
         
-        self.updates = []
         
     def prepare_topology(self):
 
@@ -82,7 +81,7 @@ class Driver(object):
                 #Keep track of all controllers to feed them updates
                 self.controllers.append(controller)        
 
-        
+    
     def update_generator(self):
         while True:
             
@@ -202,16 +201,6 @@ class Driver(object):
                         
     
     def run_2_k_study(self):
-#        for param1 in [self.param1[0], self.param1[len(self.param1) - 1]]:
-#            for param2 in [self.param2[0], self.param2[len(self.param2) - 1]]:
-#                for param3 in [self.param3[0], self.param3[len(self.param3) - 1]]:
-#                    for param4 in [self.param4[0], self.param4[len(self.param4) - 1]]:
-#                        self.current_param = (param1, param2, param3, param4)
-#                        print self.current_param
-#                        self.stats_init()
-#                        self.run_iterations()
-#                        self.stats_aggregate()
-
         
         #Study effect of arrival rate
         hi_res = []
