@@ -43,7 +43,7 @@ class Driver(object):
         
     def prepare_topology(self):
 
-        self.updates = []
+        
         self.aggregators = []
         self.controllers = []
                 
@@ -83,6 +83,8 @@ class Driver(object):
 
     
     def update_generator(self):
+        self.updates = []
+        
         while True:
             
             #Wait for a random amount of time before generating the next update
@@ -115,6 +117,8 @@ class Driver(object):
             self.setup_environment()
             self.env.run(until = self.time_until)
             self.stats_collect() 
+        
+        #del self.updates
         
     def stats_init(self):
         
